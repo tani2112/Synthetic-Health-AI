@@ -4,37 +4,7 @@
 
 > **Important:** While MedSecure AI is built with security best practices, it is provided "as-is." Always perform a full third-party security audit before deploying this software in a live clinical environment handling sensitive patient data.
 
----
 
-## 🤝 Contributing
-
-We welcome contributions to make healthcare safer! 
-1. Fork the Project.
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the Branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request.
-
----
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-## 📧 Contact
-
-**Project Link:** [https://github.com/yourusername/medsecure-ai](https://github.com/yourusername/medsecure-ai)  
-**Maintained by:** Your Name / Organization
-
----
-
-What specific part of the AI—like theCreating a solid README is like putting a nice suit on your code—it makes a great first impression. Since **MedSecure AI** sounds like a high-stakes intersection of healthcare and security, you’ll want a balance of technical detail and trust-building information.
-
-Here is a comprehensive, professional README template tailored for your project.
-
----
 
 # 🏥 MedSecure AI
 
@@ -103,3 +73,30 @@ clean_text = Anonymizer.scrub(text)
 
 print(clean_text)
 # Output: "Patient [REDACTED], born [REDACTED], visited [REDACTED]."
+## 🤝 Contributing
+
+We welcome contributions to make healthcare safer! 
+1. Fork the Project.
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`).
+4. Push to the Branch (`git push origin feature/AmazingFeature`).
+5. Open a Pull Request.
+
+---
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+## 📧 Contact
+
+**Project Link:** [https://github.com/yourusername/medsecure-ai](https://github.com/yourusername/medsecure-ai)  
+**Maintained by:** Your Name / Organization
+
+---
+
+What specific part of the AI—like theCreating a solid README is like putting a nice suit on your code—it makes a great first impression. Since **MedSecure AI** sounds like a high-stakes intersection of healthcare and security, you’ll want a balance of technical detail and trust-building information.
+
+Here is a comprehensive, professional README template tailored for your project.

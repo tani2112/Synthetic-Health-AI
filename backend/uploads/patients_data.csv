@@ -1,0 +1,11 @@
+Patient_ID,Full_Name,Age,Gender,Blood_Type,Diagnosis,Severity,Last_Visit,Contact_Number
+P001,John Doe,45,Male,O+,Hypertension,Moderate,2026-01-12,555-0102
+P002,Jane Smith,32,Female,A-,Type 2 Diabetes,High,2026-02-05,555-0199
+P003,Robert Brown,68,Male,B+,Osteoarthritis,Low,2025-11-20,555-0144
+P004,Emily Davis,29,Female,AB-,Asthma,Moderate,2026-03-15,555-0121
+P005,Michael Wilson,54,Male,O-,Coronary Artery Disease,High,2026-04-01,555-0176
+P006,Sarah Miller,41,Female,O+,Anemia,Low,2026-02-28,555-0188
+P007,David Clark,72,Male,A+,Chronic Bronchitis,Moderate,2025-12-10,555-0133
+P008,Linda White,38,Female,B-,Hyperthyroidism,Low,2026-03-22,555-0155
+P009,James Taylor,50,Male,AB+,Rheumatoid Arthritis,High,2026-01-30,555-0166
+P010,Barbara Moore,61,Female,O+,Osteoporosis,Moderate,2026-04-10,555-0100

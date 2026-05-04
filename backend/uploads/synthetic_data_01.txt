@@ -1,0 +1,16 @@
+PatientID,Age,Gender,BloodPressure,Cholesterol,Diagnosis
+P001,45,M,120/80,200,Healthy
+P002,52,F,140/90,240,Hypertension
+P003,35,M,118/76,190,Healthy
+P004,61,M,135/85,260,Hyperlipidemia
+P005,28,F,110/70,180,Healthy
+P006,49,F,130/80,210,Pre-hypertension
+P007,72,M,150/95,280,Coronary Artery Disease
+P008,39,M,122/78,195,Healthy
+P009,55,F,145/88,255,Hypertension
+P010,41,F,115/75,185,Healthy
+P011,64,M,138/82,230,Hyperlipidemia
+P012,33,M,125/80,205,Healthy
+P013,58,F,142/92,270,Hypertension
+P014,47,M,130/85,220,Pre-hypertension
+P015,68,F,148/90,265,Coronary Artery Disease

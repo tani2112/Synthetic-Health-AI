@@ -3,222 +3,260 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>MedSecure AI</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<title>MedSecure AI - Intelligence & Security</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #050b12;
-    --bg2: #0b1624;
-    --bg3: #111e30;
-    --border: rgba(0,200,150,0.15);
-    --border2: rgba(0,200,150,0.3);
-    --accent: #00e5a0;
-    --accent2: #00c8ff;
-    --accent3: #ff6b6b;
-    --text: #e8f4f0;
-    --text2: #7da99a;
-    --text3: #3d6657;
-    --card: #0c1a27;
-    --glow: 0 0 20px rgba(0,229,160,0.08);
+    --bg: #2dd4bf;       /* Vibrant Teal */
+    --bg2: #0ea5e9;      /* Vibrant Sky Blue */
+    --bg3: rgba(15, 23, 42, 0.4);      /* Panel internal bg */
+    --border: rgba(255, 255, 255, 0.1);   /* Soft Border */
+    --border2: rgba(255, 255, 255, 0.2);  /* Stronger Border */
+    --accent: #2dd4bf;   /* Strong Teal */
+    --accent-hover: #14b8a6; /* Deeper Teal */
+    --accent-light: rgba(45, 212, 191, 0.15);
+    --accent2: #38bdf8;  /* Sky Blue */
+    --accent2-light: rgba(56, 189, 248, 0.15);
+    --accent3: #ef4444;  /* Alert Red */
+    --accent3-light: rgba(239, 68, 68, 0.15);
+    --text: #ffffff;     /* White Text */
+    --text-dark: #0f172a; /* Dark Navy for bright backgrounds */
+    --text2: #cbd5e1;    /* Light Gray Text */
+    --text3: #94a3b8;    /* Muted Text */
+    --card: rgba(15, 23, 42, 0.85); /* Classy Deep Navy Glass */
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.35);
+    --glass-light: inset 0 1px 0 rgba(255, 255, 255, 0.15);
   }
   body {
-    background: var(--bg);
+    background: linear-gradient(135deg, var(--bg) 0%, var(--bg2) 100%);
+    background-attachment: fixed;
     color: var(--text);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Outfit', -apple-system, sans-serif;
     font-size: 14px;
     min-height: 100vh;
   }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border2); }
+  
   .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 18px 32px;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 32px; border-bottom: 1px solid var(--border);
+    background: var(--card); backdrop-filter: blur(12px);
+    position: sticky; top: 0; z-index: 100;
   }
   .logo {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 20px;
-    letter-spacing: -0.5px;
-    color: var(--accent);
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.5px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .logo-text {
+    background: linear-gradient(90deg, #ffffff, #38bdf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   .logo-icon {
-    width: 32px; height: 32px;
-    border: 1.5px solid var(--accent);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+    background: var(--accent); color: white; box-shadow: var(--shadow);
   }
-  .logo span { color: var(--text2); font-weight: 400; font-size: 13px; }
+  .logo span { color: var(--text2); font-weight: 500; font-size: 12px; font-family: 'IBM Plex Mono', monospace;}
   .topbar-right { display: flex; align-items: center; gap: 16px; }
   .status-pill {
-    background: rgba(0,229,160,0.08);
-    border: 1px solid rgba(0,229,160,0.25);
-    color: var(--accent);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    display: flex; align-items: center; gap: 6px;
+    background: var(--accent-light); border: 1px solid var(--border); color: var(--accent);
+    font-size: 12px; font-weight: 600; padding: 6px 14px;
+    border-radius: 20px; display: flex; align-items: center; gap: 8px;
   }
-  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: blink 2s infinite; }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-  .nav { display: flex; gap: 4px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  
+  .nav { display: flex; gap: 8px; }
   .nav button {
-    background: none; border: none; color: var(--text2); font-size: 13px; padding: 6px 14px;
-    border-radius: 6px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all .2s;
+    background: transparent; border: 1px solid transparent; color: var(--text2); font-size: 14px; font-weight: 500;
+    padding: 8px 16px; border-radius: 6px; cursor: pointer; transition: all 0.2s;
   }
-  .nav button:hover, .nav button.active { background: var(--bg3); color: var(--text); }
-  .nav button.active { color: var(--accent); }
+  .nav button:hover { background: var(--bg3); color: var(--text); }
+  .nav button.active { background: var(--accent-light); color: var(--accent); font-weight: 600; }
 
-  .main { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 65px); }
+  .main { display: grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 70px); }
 
   .sidebar {
-    border-right: 1px solid var(--border);
-    padding: 24px 16px;
+    border-right: 1px solid var(--border); padding: 24px 16px;
     display: flex; flex-direction: column; gap: 6px;
+    background: var(--card); backdrop-filter: blur(12px);
   }
   .sidebar-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px; letter-spacing: 1px; color: var(--text3);
-    padding: 12px 10px 6px; text-transform: uppercase;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+    color: var(--text3); padding: 16px 12px 8px; text-transform: uppercase;
   }
   .sidebar-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 9px 12px; border-radius: 8px; cursor: pointer;
-    color: var(--text2); font-size: 13px; transition: all .2s;
-    border: 1px solid transparent;
+    display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+    border-radius: 6px; cursor: pointer; color: var(--text2); font-size: 14px; font-weight: 500;
+    transition: all 0.2s; border: 1px solid transparent;
   }
-  .sidebar-item:hover { background: var(--bg3); color: var(--text); }
-  .sidebar-item.active { background: rgba(0,229,160,0.07); border-color: var(--border2); color: var(--accent); }
-  .sidebar-icon { width: 18px; height: 18px; opacity: 0.8; }
-  .badge {
-    margin-left: auto; background: rgba(0,200,255,0.12); color: var(--accent2);
-    font-size: 10px; padding: 2px 7px; border-radius: 10px; font-family: 'IBM Plex Mono', monospace;
-  }
+  .sidebar-item:hover { background: var(--bg); color: var(--text); }
+  .sidebar-item.active { background: var(--accent-light); color: var(--accent); }
+  .sidebar-icon { width: 18px; height: 18px; }
+  .badge { margin-left: auto; background: var(--bg3); color: var(--text); font-size: 11px; padding: 2px 8px; border-radius: 12px; font-weight: 600; }
 
-  .content { padding: 28px 32px; overflow-y: auto; }
+  .content { padding: 40px 48px; overflow-y: auto; }
   .page { display: none; }
-  .page.active { display: block; }
+  .page.active { display: block; animation: fadeIn 0.3s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-  .page-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 4px; }
-  .page-sub { color: var(--text2); font-size: 13px; margin-bottom: 28px; }
+  .page-title { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 6px; color: var(--text-dark); text-shadow: 0 1px 2px rgba(255,255,255,0.4); }
+  .page-sub { color: rgba(15, 23, 42, 0.8); font-size: 15px; margin-bottom: 32px; font-weight: 500; }
 
-  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 32px; }
   .metric-card {
     background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    padding: 18px 20px; box-shadow: var(--glow);
+    padding: 24px; box-shadow: var(--glass-light), var(--shadow); backdrop-filter: blur(12px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .metric-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.5px; color: var(--text3); margin-bottom: 8px; }
-  .metric-val { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 700; color: var(--text); }
-  .metric-change { font-size: 11px; margin-top: 4px; color: var(--accent); }
+  .metric-card:hover { border-color: rgba(255,255,255,0.3); transform: translateY(-4px); box-shadow: var(--glass-light), var(--shadow-hover); }
+  
+  .metric-label { font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .metric-val { font-size: 30px; font-weight: 700; letter-spacing: -1px; color: var(--text); }
+  .metric-change { font-size: 13px; margin-top: 8px; color: var(--text2); font-weight: 500; }
+  .metric-change.positive { color: var(--accent2); }
   .metric-change.warn { color: var(--accent3); }
 
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 20px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
   .panel {
-    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-    padding: 20px 22px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px; box-shadow: var(--glass-light), var(--shadow); backdrop-filter: blur(12px);
+    transition: box-shadow 0.3s, border-color 0.3s;
   }
-  .panel-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; margin-bottom: 16px; color: var(--text); display: flex; align-items: center; justify-content: space-between; }
-  .tag { font-size: 10px; font-family: 'IBM Plex Mono', monospace; padding: 3px 8px; border-radius: 6px; }
-  .tag-green { background: rgba(0,229,160,0.1); color: var(--accent); border: 1px solid rgba(0,229,160,0.2); }
-  .tag-blue { background: rgba(0,200,255,0.1); color: var(--accent2); border: 1px solid rgba(0,200,255,0.2); }
-  .tag-red { background: rgba(255,107,107,0.1); color: var(--accent3); border: 1px solid rgba(255,107,107,0.2); }
+  .panel:hover { border-color: rgba(255,255,255,0.2); box-shadow: var(--glass-light), var(--shadow-hover); }
+  .panel-title { font-size: 18px; font-weight: 700; margin-bottom: 24px; color: var(--text); display: flex; align-items: center; justify-content: space-between; }
+  
+  .tag { font-size: 11px; padding: 4px 10px; border-radius: 4px; font-weight: 600; }
+  .tag-green { background: var(--accent2-light); color: var(--accent2); }
+  .tag-blue { background: var(--accent-light); color: var(--accent); }
+  .tag-red { background: var(--accent3-light); color: var(--accent3); }
 
-  .flow { display: flex; align-items: center; gap: 0; margin-bottom: 18px; }
+  .flow { display: flex; align-items: center; margin-bottom: 20px; }
   .flow-step {
     flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
-    padding: 12px 10px; text-align: center; font-size: 11px; color: var(--text2);
-    position: relative;
+    padding: 16px 12px; text-align: center; font-size: 13px; color: var(--text2);
   }
-  .flow-step strong { display: block; color: var(--text); font-size: 12px; margin-bottom: 3px; font-family: 'Syne', sans-serif; }
-  .flow-step.highlight { border-color: var(--accent); background: rgba(0,229,160,0.05); }
+  .flow-step strong { display: block; color: var(--text); font-size: 14px; margin-bottom: 6px; font-weight: 600; }
+  .flow-step.highlight { border-color: var(--accent); background: rgba(45, 212, 191, 0.2); }
   .flow-step.highlight strong { color: var(--accent); }
-  .arrow { color: var(--text3); font-size: 16px; padding: 0 6px; flex-shrink: 0; }
+  .arrow { color: var(--text3); font-size: 16px; padding: 0 12px; }
 
-  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 11px; }
-  .bar-label { font-size: 12px; color: var(--text2); width: 90px; flex-shrink: 0; }
-  .bar-track { flex: 1; height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
-  .bar-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width 1s ease; }
+  .bar-row { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+  .bar-label { font-size: 13px; color: var(--text2); width: 100px; font-weight: 600; }
+  .bar-track { flex: 1; height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; background: var(--accent); transition: width 0.5s; }
   .bar-fill.blue { background: var(--accent2); }
   .bar-fill.red { background: var(--accent3); }
-  .bar-val { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text2); width: 38px; text-align: right; }
+  .bar-val { font-size: 13px; color: var(--text); width: 44px; text-align: right; font-weight: 700; }
 
-  .chain-list { display: flex; flex-direction: column; gap: 10px; }
-  .chain-item {
-    display: flex; align-items: center; gap: 12px;
-    background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px;
+  /* Professional Solid Blockchain UI */
+  .chain-visualizer-container {
+    position: relative;
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 0;
   }
-  .chain-hash { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent2); flex: 1; }
-  .chain-meta { font-size: 11px; color: var(--text2); }
-  .chain-status { font-size: 10px; padding: 2px 8px; border-radius: 10px; }
-  .confirmed { background: rgba(0,229,160,0.1); color: var(--accent); }
-  .pending { background: rgba(255,180,0,0.1); color: #ffb400; }
+  .chain-visualizer {
+    display: flex; align-items: center; padding: 20px 24px 30px 24px; overflow-x: auto; gap: 0; min-height: 180px;
+    scroll-behavior: smooth;
+  }
+  .chain-visualizer::-webkit-scrollbar { height: 12px; }
+  .chain-visualizer::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 6px; margin: 0 24px; }
+  .chain-visualizer::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 6px; border: 2px solid rgba(15, 23, 42, 0.8); }
+  .chain-visualizer::-webkit-scrollbar-thumb:hover { background: var(--accent2); }
 
-  .honeypot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .block-node-wrapper { display: flex; align-items: center; flex-shrink: 0; }
+  
+  .block-node {
+    width: 140px; padding: 16px; background: var(--card);
+    border: 1px solid var(--border2); border-left: 3px solid var(--accent); border-radius: 8px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+    cursor: pointer; position: relative; transition: all 0.3s; box-shadow: var(--glass-light), var(--shadow); backdrop-filter: blur(8px);
+  }
+  .block-node:hover, .block-node.active {
+    border-color: var(--accent); transform: translateY(-4px) scale(1.02); box-shadow: var(--glass-light), var(--shadow-hover); background: var(--bg3);
+  }
+  .block-node.latest { border-color: var(--accent); background: var(--accent-light); }
+
+  .block-index { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .block-tiny-hash { font-size: 11px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; }
+
+  .block-link {
+    width: 40px; height: 2px; background: var(--border2); position: relative; z-index: 1;
+  }
+
+  .decoder-terminal {
+    background: #0f172a; border: 1px solid #1e293b; border-radius: 10px;
+    padding: 20px; font-family: 'IBM Plex Mono', monospace; color: #38bdf8;
+    min-height: 200px; position: relative; overflow: hidden; margin-top: 20px;
+    box-shadow: inset 0 2px 15px rgba(0,0,0,0.6), var(--shadow);
+  }
+  .terminal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 12px; margin-bottom: 15px; font-size: 12px; color: #94a3b8; }
+  .window-controls { display: flex; gap: 6px; }
+  .window-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #ff5f56; } .dot-y { background: #ffbd2e; } .dot-g { background: #27c93f; }
+  .terminal-content { font-size: 13px; line-height: 1.6; white-space: pre-wrap; word-break: break-all; }
+
+  .honeypot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .hp-cell {
-    background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
-    padding: 14px; text-align: center;
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px; text-align: center; transition: all 0.3s; box-shadow: var(--glass-light), var(--shadow); backdrop-filter: blur(8px);
   }
-  .hp-cell.triggered { border-color: rgba(255,107,107,0.4); background: rgba(255,107,107,0.05); animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
-  .hp-name { font-size: 11px; color: var(--text2); margin-bottom: 6px; font-family: 'IBM Plex Mono', monospace; }
-  .hp-icon { font-size: 20px; margin-bottom: 6px; }
-  .hp-status { font-size: 10px; }
+  .hp-cell:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.3); box-shadow: var(--glass-light), var(--shadow-hover); }
+  .hp-cell.triggered { border-color: var(--accent3); background: var(--accent3-light); }
+  .hp-name { font-size: 13px; color: var(--text); margin-bottom: 8px; font-weight: 600; }
+  .hp-icon { font-size: 24px; margin-bottom: 12px; }
+  .hp-status { font-size: 12px; font-weight: 600; }
 
   .patient-table { width: 100%; border-collapse: collapse; }
-  .patient-table th { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.5px; color: var(--text3); text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); }
-  .patient-table td { padding: 11px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 12px; color: var(--text2); }
+  .patient-table th { font-size: 12px; font-weight: 700; color: var(--text2); text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border2); background: var(--bg3); }
+  .patient-table td { padding: 16px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text); }
   .patient-table tr:hover td { background: var(--bg3); }
-  .patient-id { font-family: 'IBM Plex Mono', monospace; color: var(--accent2); }
-  .synth-ready { color: var(--accent); }
-  .synth-pending { color: #ffb400; }
+  .patient-id { font-family: 'IBM Plex Mono', monospace; color: var(--accent); font-weight: 600; }
 
-  .gan-viz { position: relative; height: 130px; display: flex; align-items: center; justify-content: center; gap: 20px; margin: 10px 0; }
+  .gan-viz { position: relative; display: flex; align-items: center; justify-content: center; gap: 40px; margin: 30px 0; }
   .gan-box {
-    background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-    width: 100px; padding: 14px 10px; text-align: center;
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    width: 140px; padding: 24px 16px; text-align: center; box-shadow: var(--glass-light), var(--shadow); backdrop-filter: blur(8px);
   }
-  .gan-box.gen { border-color: rgba(0,229,160,0.3); }
-  .gan-box.disc { border-color: rgba(0,200,255,0.3); }
-  .gan-label { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 600; margin-bottom: 6px; }
-  .gan-sub { font-size: 10px; color: var(--text3); }
-  .gan-arrow { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-  .gan-arrow span { font-size: 10px; color: var(--text3); }
-  .gan-arrow .arr { color: var(--accent); font-size: 18px; }
-  .progress-ring { width: 60px; height: 60px; margin: 0 auto 6px; }
+  .gan-label { font-size: 14px; font-weight: 700; margin-bottom: 16px; color: var(--text); }
+  .gan-arrow { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .gan-arrow .line { height: 2px; width: 60px; background: linear-gradient(90deg, var(--accent), var(--accent2)); position: relative; overflow: hidden; }
+  .gan-arrow .line::after { content: ''; position: absolute; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, #fff, transparent); animation: sweep 1.5s infinite; }
+  @keyframes sweep { 100% { left: 100%; } }
 
   .btn {
-    background: rgba(0,229,160,0.08); border: 1px solid rgba(0,229,160,0.3); color: var(--accent);
-    font-family: 'IBM Plex Mono', monospace; font-size: 12px; padding: 8px 18px;
-    border-radius: 8px; cursor: pointer; transition: all .2s;
+    background: var(--card); border: 1px solid var(--border2); color: var(--text);
+    font-size: 14px; font-weight: 600; padding: 10px 20px;
+    border-radius: 8px; cursor: pointer; transition: all 0.3s; box-shadow: var(--glass-light), var(--shadow); backdrop-filter: blur(4px);
   }
-  .btn:hover { background: rgba(0,229,160,0.15); }
-  .btn.danger { background: rgba(255,107,107,0.08); border-color: rgba(255,107,107,0.3); color: var(--accent3); }
-  .btn.blue { background: rgba(0,200,255,0.08); border-color: rgba(0,200,255,0.3); color: var(--accent2); }
+  .btn:hover { background: var(--bg3); border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--glass-light), var(--shadow-hover); }
+  .btn.blue { background: var(--accent); color: white; border: none; }
+  .btn.blue:hover { background: var(--accent-hover); }
+  .btn.danger { background: var(--accent3); color: white; border: none; }
+  .btn.danger:hover { background: #b91c1c; }
 
   .upload-zone {
-    border: 1.5px dashed var(--border2); border-radius: 12px;
-    padding: 40px 20px; text-align: center; cursor: pointer; transition: all .2s;
-    background: rgba(0,229,160,0.02);
+    border: 2px dashed var(--border2); border-radius: 8px;
+    padding: 40px 24px; text-align: center; cursor: pointer; transition: all 0.2s;
+    background: var(--bg3);
   }
-  .upload-zone:hover { background: rgba(0,229,160,0.05); border-color: var(--accent); }
-  .upload-icon { font-size: 32px; margin-bottom: 12px; }
-  .upload-text { color: var(--text2); font-size: 13px; }
-  .upload-text span { color: var(--accent); cursor: pointer; }
+  .upload-zone:hover { background: var(--bg); border-color: var(--accent); }
+  .upload-icon { font-size: 32px; margin-bottom: 16px; }
+  .upload-text { color: var(--text); font-size: 14px; font-weight: 600; }
+  .upload-text span { color: var(--accent); font-weight: 700; text-decoration: underline; }
 
-  .inline-flex { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  .inline-flex { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
   .full-panel { grid-column: 1 / -1; }
 
-  .log-list { font-family: 'IBM Plex Mono', monospace; font-size: 11px; display: flex; flex-direction: column; gap: 6px; max-height: 160px; overflow-y: auto; }
-  .log-item { display: flex; gap: 12px; }
-  .log-time { color: var(--text3); flex-shrink: 0; }
-  .log-msg { color: var(--text2); }
+  .log-list { display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; padding-right: 8px; }
+  .log-item { display: flex; gap: 16px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .log-item:last-child { border-bottom: none; }
+  .log-time { color: var(--text3); font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+  .log-msg { color: var(--text); }
   .log-msg.ok { color: var(--accent); }
   .log-msg.warn { color: var(--accent3); }
   .log-msg.info { color: var(--accent2); }
@@ -228,9 +266,9 @@
 
 <div class="topbar">
   <div class="logo">
-    <div class="logo-icon">🔒</div>
-    MedSecure AI
-    <span>/ v2.1.0</span>
+    <div class="logo-icon">🛡️</div>
+    <span class="logo-text">MedSecure AI</span>
+    <span>v2.4.0</span>
   </div>
   <div class="nav">
     <button class="active" onclick="showPage('dashboard', this)">Dashboard</button>
@@ -240,7 +278,7 @@
     <button onclick="showPage('patients', this)">Patients</button>
   </div>
   <div class="topbar-right">
-    <div class="status-pill"><div class="dot"></div>All Systems Active</div>
+    <div class="status-pill"><div class="dot"></div>System Secure</div>
   </div>
 </div>
 
@@ -376,9 +414,9 @@
               <div class="gan-sub">Synthetic output</div>
             </div>
             <div class="gan-arrow">
-              <span>noise →</span>
-              <div class="arr">⇄</div>
-              <span>← real</span>
+              <span style="font-family:'IBM Plex Mono',monospace;letter-spacing:1px;color:var(--accent)">NOISE</span>
+              <div class="line"></div>
+              <span style="font-family:'IBM Plex Mono',monospace;letter-spacing:1px;color:var(--accent2)">REAL DATA</span>
             </div>
             <div class="gan-box disc">
               <div class="gan-label" style="color:var(--accent2)">Discriminator</div>
@@ -433,14 +471,46 @@
       </div>
 
       <div class="panel">
-        <div class="panel-title">Recent Blocks <span class="tag tag-blue">Live</span></div>
-        <div class="chain-list" id="blockchain-list">
-          <!-- Populated by JS -->
+        <div class="panel-title">Cryptographic Node Ledger <span class="tag tag-blue">Live Network</span></div>
+        <div class="chain-visualizer-container">
+          <div class="chain-visualizer" id="blockchain-visualizer">
+            <!-- Populated by JS -->
+          </div>
         </div>
+        
+        <div class="decoder-terminal">
+          <div class="terminal-header">
+            <div class="window-controls">
+              <div class="window-dot dot-r"></div>
+              <div class="window-dot dot-y"></div>
+              <div class="window-dot dot-g"></div>
+            </div>
+            <span id="term-status">AWAITING_INPUT</span>
+          </div>
+          <div class="terminal-content" id="term-content">Select a cryptographic node to decode block matrix...<span class="cursor"></span></div>
+        </div>
+        
         <div class="inline-flex" style="margin-top:16px">
-          <button class="btn blue">🔍 Verify Block Hash</button>
-          <button class="btn">↓ Export Audit CSV</button>
+          <button class="btn blue">🔍 Audit Entire Chain</button>
+          <button class="btn">↓ Export Genesis Ledger</button>
         </div>
+      </div>
+
+      <div class="panel" style="margin-top: 24px">
+        <div class="panel-title">Registered Datasets <span class="tag tag-green">Verified on Chain</span></div>
+        <table class="patient-table">
+          <thead>
+            <tr>
+              <th>FILENAME</th>
+              <th>AUDIT LOG STATUS</th>
+              <th>BLOCK HASH</th>
+              <th>TIMESTAMP</th>
+            </tr>
+          </thead>
+          <tbody id="registered-files-body">
+            <tr><td colspan="4" style="text-align:center; color:var(--text3); font-style:italic;">No files registered yet</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -588,37 +658,131 @@ function showPage(name, navBtn, sidebarBtn) {
   }
 }
 
+let rawChainData = [];
+let typeWriterInterval = null;
+
 function fetchBlockchain() {
   fetch('/api/blockchain')
     .then(res => res.json())
     .then(data => {
-      const list = document.getElementById('blockchain-list');
-      if (!list) return;
-      list.innerHTML = '';
+      const visualizer = document.getElementById('blockchain-visualizer');
+      const registeredFilesBody = document.getElementById('registered-files-body');
+      
+      if (visualizer) visualizer.innerHTML = '';
+      if (registeredFilesBody) registeredFilesBody.innerHTML = '';
       
       const blocksCountEl = document.getElementById('blocks-count-val');
       if (blocksCountEl) blocksCountEl.textContent = data.length;
       
       const lastHashEl = document.getElementById('last-hash-val');
       if (lastHashEl && data.length > 0) {
-        const lh = data[data.length - 1].hash;
+        const lh = data.chain[data.chain.length - 1].hash;
         lastHashEl.textContent = lh.substring(0, 10) + '...' + lh.substring(lh.length - 4);
       }
       
-      data.reverse().forEach(block => {
-        const item = document.createElement('div');
-        item.className = 'chain-item';
-        const shortHash = block.hash.substring(0, 16) + '...' + block.hash.substring(block.hash.length - 4);
-        item.innerHTML = `
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);min-width:52px">#${block.index}</div>
-          <div class="chain-hash" title="${block.hash}">${shortHash}</div>
-          <div class="chain-meta">${block.meta}</div>
-          <div class="chain-status confirmed">Confirmed</div>
+      rawChainData = data.chain;
+      
+      // Render blocks
+      data.chain.forEach((block, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'block-node-wrapper';
+        
+        const isLatest = index === data.chain.length - 1;
+        const shortHash = block.hash.substring(0, 6);
+        
+        let nodeHTML = `
+          <div class="block-node ${isLatest ? 'latest active' : ''}" onclick="decryptBlock(${index}, this)">
+            <div class="block-index">#${block.index}</div>
+            <div class="block-tiny-hash">${shortHash}</div>
+          </div>
         `;
-        list.appendChild(item);
+        
+        if (!isLatest) {
+          nodeHTML += `<div class="block-link"></div>`;
+        }
+        
+        wrapper.innerHTML = nodeHTML;
+        if(visualizer) visualizer.appendChild(wrapper);
+
+        // Populate the Registered Datasets table
+        if (block.meta.includes('Uploaded raw data:') || block.meta.includes('GAN synthesis completed')) {
+          let filename = block.meta.includes('Uploaded raw data:') ? block.meta.split(': ')[1] : block.meta.split('for ')[1];
+          let statusText = block.meta.includes('GAN synthesis') ? 'Synthesis Confirmed' : 'Successfully Registered';
+          
+          let tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td style="color:var(--accent2); font-family:'IBM Plex Mono', monospace;">📄 ${filename}</td>
+            <td style="color:var(--accent); font-weight:600;">✓ ${statusText}</td>
+            <td style="font-family:'IBM Plex Mono', monospace; font-size:11px;">${block.hash.substring(0, 16)}...</td>
+            <td style="font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--text3)">${block.timestamp}</td>
+          `;
+          if (registeredFilesBody) registeredFilesBody.appendChild(tr);
+        }
       });
+      
+      // If no files registered, show empty state
+      if (registeredFilesBody && registeredFilesBody.children.length === 0) {
+        registeredFilesBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text3); font-style:italic;">No files registered yet</td></tr>';
+      }
+      
+      // Auto-scroll to right and select the latest block
+      setTimeout(() => { 
+        if(visualizer) {
+          visualizer.scrollLeft = visualizer.scrollWidth; 
+          if (data.chain.length > 0 && visualizer.lastElementChild) {
+            decryptBlock(data.chain.length - 1, visualizer.lastElementChild.querySelector('.block-node'));
+          }
+        }
+      }, 100);
+
+      // Add mouse wheel horizontal scrolling
+      if (visualizer) {
+        visualizer.addEventListener('wheel', function(e) {
+          if (e.deltaY !== 0) {
+            e.preventDefault();
+            visualizer.scrollLeft += e.deltaY;
+          }
+        });
+      }
     })
     .catch(err => console.error('Error fetching blockchain:', err));
+}
+
+function decryptBlock(index, element) {
+  if (element) {
+    document.querySelectorAll('.block-node').forEach(n => n.classList.remove('active'));
+    element.classList.add('active');
+  }
+  
+  const block = rawChainData[index];
+  const termContent = document.getElementById('terminal-content');
+  const termStatus = document.getElementById('term-status');
+  
+  if(!block || !termContent) return;
+  
+  termStatus.textContent = 'DECRYPTING...';
+  termStatus.style.color = 'var(--accent3)';
+  
+  const payload = JSON.stringify(block, null, 2);
+  let i = 0;
+  
+  if(typeWriterInterval) clearInterval(typeWriterInterval);
+  termContent.innerHTML = '<span class="cursor"></span>';
+  
+  setTimeout(() => {
+    termStatus.textContent = 'DECRYPTED_SUCCESS';
+    termStatus.style.color = 'var(--accent2)';
+    termContent.innerHTML = '';
+    
+    typeWriterInterval = setInterval(() => {
+      termContent.innerHTML = payload.substring(0, i) + '<span class="cursor"></span>';
+      i += 8; // Faster type speed
+      if (i >= payload.length) {
+        clearInterval(typeWriterInterval);
+        termContent.innerHTML = payload;
+      }
+    }, 10);
+  }, 200);
 }
 
 let currentUploadedFile = null;

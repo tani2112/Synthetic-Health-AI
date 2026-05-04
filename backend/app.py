@@ -13,14 +13,24 @@ UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+from flask import make_response
+
 @app.route('/')
 def index():
     # Serves your provided medsecure_ai_dashboard.html
-    return render_template('medsecure_ai_dashboard.html')
+    resp = make_response(render_template('medsecure_ai_dashboard.html'))
+    resp.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    resp.headers['Pragma'] = 'no-cache'
+    resp.headers['Expires'] = '0'
+    return resp
 
 @app.route('/api/blockchain', methods=['GET'])
 def get_chain():
-    return jsonify(audit_trail.chain)
+    chain_data = audit_trail.chain
+    return jsonify({
+        'length': len(chain_data),
+        'chain': chain_data
+    })
 
 @app.route('/api/upload', methods=['POST'])
 def upload_file():

@@ -355,6 +355,7 @@
             <div class="upload-icon">📂</div>
             <div class="upload-text">Drop CSV / HL7 / FHIR here<br><span>or click to browse</span></div>
           </div>
+          <input type="file" id="fileInput" accept=".csv" style="display:none;" />
           <div id="upload-status" style="margin-top:14px; font-size:12px; color:var(--text3); font-family:'IBM Plex Mono',monospace;"></div>
           <div class="inline-flex">
             <button class="btn" onclick="runSynthesis()">▶ Run GAN Synthesis</button>
@@ -426,44 +427,15 @@
       <div class="page-sub">Immutable tamper-proof ledger of every data access, synthesis, and vault event.</div>
 
       <div class="metrics" style="grid-template-columns:repeat(3,1fr)">
-        <div class="metric-card"><div class="metric-label">TOTAL BLOCKS</div><div class="metric-val">3,902</div><div class="metric-change">Chain integrity: 100%</div></div>
-        <div class="metric-card"><div class="metric-label">LAST BLOCK HASH</div><div class="metric-val" style="font-size:14px;font-family:'IBM Plex Mono',monospace;color:var(--accent2)">0xf8a2...d91c</div><div class="metric-change">2 minutes ago</div></div>
+        <div class="metric-card"><div class="metric-label">TOTAL BLOCKS</div><div class="metric-val" id="blocks-count-val">3,902</div><div class="metric-change">Chain integrity: 100%</div></div>
+        <div class="metric-card"><div class="metric-label">LAST BLOCK HASH</div><div class="metric-val" id="last-hash-val" style="font-size:14px;font-family:'IBM Plex Mono',monospace;color:var(--accent2)">0xf8a2...d91c</div><div class="metric-change">Recent</div></div>
         <div class="metric-card"><div class="metric-label">CONSENSUS</div><div class="metric-val">PoA</div><div class="metric-change">3 validators active</div></div>
       </div>
 
       <div class="panel">
         <div class="panel-title">Recent Blocks <span class="tag tag-blue">Live</span></div>
-        <div class="chain-list">
-          <div class="chain-item">
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);min-width:52px">#3902</div>
-            <div class="chain-hash">0xf8a2c3e1d44b9f02a831...d91c</div>
-            <div class="chain-meta">Synthesis · PT-4821</div>
-            <div class="chain-status confirmed">Confirmed</div>
-          </div>
-          <div class="chain-item">
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);min-width:52px">#3901</div>
-            <div class="chain-hash">0xb31a77f5c022e9d4f018...c423</div>
-            <div class="chain-meta">Vault seal · Batch 88</div>
-            <div class="chain-status confirmed">Confirmed</div>
-          </div>
-          <div class="chain-item">
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);min-width:52px">#3900</div>
-            <div class="chain-hash">0x2de4aa81b99c3f7e2155...8f01</div>
-            <div class="chain-meta">Access log · Dr. Meera</div>
-            <div class="chain-status confirmed">Confirmed</div>
-          </div>
-          <div class="chain-item">
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);min-width:52px">#3899</div>
-            <div class="chain-hash">0x9fa0d12c7bb4e6509a33...1b77</div>
-            <div class="chain-meta">Honeypot alert · IP flagged</div>
-            <div class="chain-status" style="background:rgba(255,180,0,0.1);color:#ffb400">Sealed</div>
-          </div>
-          <div class="chain-item">
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);min-width:52px">#3898</div>
-            <div class="chain-hash">0x3cd9b04e11f2a8706e77...4a2c</div>
-            <div class="chain-meta">Synthesis · PT-4820</div>
-            <div class="chain-status confirmed">Confirmed</div>
-          </div>
+        <div class="chain-list" id="blockchain-list">
+          <!-- Populated by JS -->
         </div>
         <div class="inline-flex" style="margin-top:16px">
           <button class="btn blue">🔍 Verify Block Hash</button>
@@ -610,15 +582,94 @@ function showPage(name, navBtn, sidebarBtn) {
   sidebarItems.forEach(b => b.classList.remove('active'));
   if (navBtn) navBtn.classList.add('active');
   if (sidebarBtn) sidebarBtn.classList.add('active');
+  
+  if (name === 'blockchain') {
+    fetchBlockchain();
+  }
 }
+
+function fetchBlockchain() {
+  fetch('/api/blockchain')
+    .then(res => res.json())
+    .then(data => {
+      const list = document.getElementById('blockchain-list');
+      if (!list) return;
+      list.innerHTML = '';
+      
+      const blocksCountEl = document.getElementById('blocks-count-val');
+      if (blocksCountEl) blocksCountEl.textContent = data.length;
+      
+      const lastHashEl = document.getElementById('last-hash-val');
+      if (lastHashEl && data.length > 0) {
+        const lh = data[data.length - 1].hash;
+        lastHashEl.textContent = lh.substring(0, 10) + '...' + lh.substring(lh.length - 4);
+      }
+      
+      data.reverse().forEach(block => {
+        const item = document.createElement('div');
+        item.className = 'chain-item';
+        const shortHash = block.hash.substring(0, 16) + '...' + block.hash.substring(block.hash.length - 4);
+        item.innerHTML = `
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);min-width:52px">#${block.index}</div>
+          <div class="chain-hash" title="${block.hash}">${shortHash}</div>
+          <div class="chain-meta">${block.meta}</div>
+          <div class="chain-status confirmed">Confirmed</div>
+        `;
+        list.appendChild(item);
+      });
+    })
+    .catch(err => console.error('Error fetching blockchain:', err));
+}
+
+let currentUploadedFile = null;
 
 function simulateUpload() {
-  const el = document.getElementById('upload-status');
-  el.style.color = 'var(--accent)';
-  el.textContent = '✓ patients_batch_89.csv loaded — 128 records detected';
+  document.getElementById('fileInput').click();
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  const fileInput = document.getElementById('fileInput');
+  if (fileInput) {
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const el = document.getElementById('upload-status');
+      el.style.color = 'var(--accent2)';
+      el.textContent = 'Uploading...';
+      
+      fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'success') {
+          currentUploadedFile = data.filename;
+          el.style.color = 'var(--accent)';
+          el.textContent = `✓ ${data.filename} loaded successfully`;
+        } else {
+          el.style.color = 'var(--accent3)';
+          el.textContent = `Error: ${data.error}`;
+        }
+      })
+      .catch(err => {
+        el.style.color = 'var(--accent3)';
+        el.textContent = `Error uploading file`;
+      });
+    });
+  }
+});
+
 function runSynthesis() {
+  if (!currentUploadedFile) {
+    alert("Please upload a raw data CSV file first.");
+    return;
+  }
+  
   const bar = document.getElementById('synth-bar');
   const pct = document.getElementById('synth-pct');
   const steps = ['step1','step2','step3','step4'];
@@ -629,23 +680,42 @@ function runSynthesis() {
   document.getElementById('step2').textContent = '⬜ Preprocess';
   document.getElementById('step3').textContent = '⬜ Train GAN';
   document.getElementById('step4').textContent = '⬜ Export Synthetic';
-  let i = 0;
-  function next() {
-    if (i >= 4) { pct.textContent = '100% Done'; pct.className = 'tag tag-green'; return; }
-    bar.style.width = widths[i] + '%';
-    document.getElementById(steps[i]).textContent = labels[i];
-    document.getElementById(steps[i]).style.color = 'var(--accent)';
-    pct.textContent = widths[i] + '%';
-    i++;
-    setTimeout(next, 900);
-  }
+  
   pct.textContent = 'Running...';
-  next();
+  
+  fetch('/api/synthesis/start', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ filename: currentUploadedFile })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if(data.error) throw new Error(data.error);
+      let i = 0;
+      function next() {
+        if (i >= 4) { pct.textContent = '100% Done'; pct.className = 'tag tag-green'; return; }
+        bar.style.width = widths[i] + '%';
+        document.getElementById(steps[i]).textContent = labels[i];
+        document.getElementById(steps[i]).style.color = 'var(--accent)';
+        pct.textContent = widths[i] + '%';
+        i++;
+        setTimeout(next, 900);
+      }
+      next();
+    })
+    .catch(err => {
+      console.error(err);
+      pct.textContent = 'Error!';
+      pct.className = 'tag tag-red';
+    });
 }
 
 function downloadSynth() {
-  alert('Synthetic dataset download triggered — blockchain audit logged.');
+  window.location.href = '/api/synthesis/download';
 }
+
+// Initial fetch
+fetchBlockchain();
 </script>
 </body>
 </html>

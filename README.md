@@ -1,11 +1,3 @@
-
-
-## 🔒 Security Disclaimer
-
-> **Important:** While MedSecure AI is built with security best practices, it is provided "as-is." Always perform a full third-party security audit before deploying this software in a live clinical environment handling sensitive patient data.
-
-
-
 # 🏥 MedSecure AI
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
@@ -100,3 +92,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 What specific part of the AI—like theCreating a solid README is like putting a nice suit on your code—it makes a great first impression. Since **MedSecure AI** sounds like a high-stakes intersection of healthcare and security, you’ll want a balance of technical detail and trust-building information.
 
 Here is a comprehensive, professional README template tailored for your project.
+## 🔒 Security Disclaimer
+
+> **Important:** While MedSecure AI is built with security best practices, it is provided "as-is." Always perform a full third-party security audit before deploying this software in a live clinical environment handling sensitive patient data.

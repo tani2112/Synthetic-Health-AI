@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MedSecure AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #050b12;
+    --bg2: #0b1624;
+    --bg3: #111e30;
+    --border: rgba(0,200,150,0.15);
+    --border2: rgba(0,200,150,0.3);
+    --accent: #00e5a0;
+    --accent2: #00c8ff;
+    --accent3: #ff6b6b;
+    --text: #e8f4f0;
+    --text2: #7da99a;
+    --text3: #3d6657;
+    --card: #0c1a27;
+    --glow: 0 0 20px rgba(0,229,160,0.08);
+  }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+  }
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -0.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-icon {
+    width: 32px; height: 32px;
+    border: 1.5px solid var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .logo span { color: var(--text2); font-weight: 400; font-size: 13px; }
+  .topbar-right { display: flex; align-items: center; gap: 16px; }
+  .status-pill {
+    background: rgba(0,229,160,0.08);
+    border: 1px solid rgba(0,229,160,0.25);
+    color: var(--accent);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: blink 2s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .nav { display: flex; gap: 4px; }
+  .nav button {
+    background: none; border: none; color: var(--text2); font-size: 13px; padding: 6px 14px;
+    border-radius: 6px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all .2s;
+  }
+  .nav button:hover, .nav button.active { background: var(--bg3); color: var(--text); }
+  .nav button.active { color: var(--accent); }
+
+  .main { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 65px); }
+
+  .sidebar {
+    border-right: 1px solid var(--border);
+    padding: 24px 16px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .sidebar-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 1px; color: var(--text3);
+    padding: 12px 10px 6px; text-transform: uppercase;
+  }
+  .sidebar-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px; border-radius: 8px; cursor: pointer;
+    color: var(--text2); font-size: 13px; transition: all .2s;
+    border: 1px solid transparent;
+  }
+  .sidebar-item:hover { background: var(--bg3); color: var(--text); }
+  .sidebar-item.active { background: rgba(0,229,160,0.07); border-color: var(--border2); color: var(--accent); }
+  .sidebar-icon { width: 18px; height: 18px; opacity: 0.8; }
+  .badge {
+    margin-left: auto; background: rgba(0,200,255,0.12); color: var(--accent2);
+    font-size: 10px; padding: 2px 7px; border-radius: 10px; font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .content { padding: 28px 32px; overflow-y: auto; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .page-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .page-sub { color: var(--text2); font-size: 13px; margin-bottom: 28px; }
+
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+  .metric-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px 20px; box-shadow: var(--glow);
+  }
+  .metric-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.5px; color: var(--text3); margin-bottom: 8px; }
+  .metric-val { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 700; color: var(--text); }
+  .metric-change { font-size: 11px; margin-top: 4px; color: var(--accent); }
+  .metric-change.warn { color: var(--accent3); }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 20px; }
+  .panel {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 20px 22px;
+  }
+  .panel-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; margin-bottom: 16px; color: var(--text); display: flex; align-items: center; justify-content: space-between; }
+  .tag { font-size: 10px; font-family: 'IBM Plex Mono', monospace; padding: 3px 8px; border-radius: 6px; }
+  .tag-green { background: rgba(0,229,160,0.1); color: var(--accent); border: 1px solid rgba(0,229,160,0.2); }
+  .tag-blue { background: rgba(0,200,255,0.1); color: var(--accent2); border: 1px solid rgba(0,200,255,0.2); }
+  .tag-red { background: rgba(255,107,107,0.1); color: var(--accent3); border: 1px solid rgba(255,107,107,0.2); }
+
+  .flow { display: flex; align-items: center; gap: 0; margin-bottom: 18px; }
+  .flow-step {
+    flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+    padding: 12px 10px; text-align: center; font-size: 11px; color: var(--text2);
+    position: relative;
+  }
+  .flow-step strong { display: block; color: var(--text); font-size: 12px; margin-bottom: 3px; font-family: 'Syne', sans-serif; }
+  .flow-step.highlight { border-color: var(--accent); background: rgba(0,229,160,0.05); }
+  .flow-step.highlight strong { color: var(--accent); }
+  .arrow { color: var(--text3); font-size: 16px; padding: 0 6px; flex-shrink: 0; }
+
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 11px; }
+  .bar-label { font-size: 12px; color: var(--text2); width: 90px; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width 1s ease; }
+  .bar-fill.blue { background: var(--accent2); }
+  .bar-fill.red { background: var(--accent3); }
+  .bar-val { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text2); width: 38px; text-align: right; }
+
+  .chain-list { display: flex; flex-direction: column; gap: 10px; }
+  .chain-item {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px;
+  }
+  .chain-hash { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent2); flex: 1; }
+  .chain-meta { font-size: 11px; color: var(--text2); }
+  .chain-status { font-size: 10px; padding: 2px 8px; border-radius: 10px; }
+  .confirmed { background: rgba(0,229,160,0.1); color: var(--accent); }
+  .pending { background: rgba(255,180,0,0.1); color: #ffb400; }
+
+  .honeypot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .hp-cell {
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px; text-align: center;
+  }
+  .hp-cell.triggered { border-color: rgba(255,107,107,0.4); background: rgba(255,107,107,0.05); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+  .hp-name { font-size: 11px; color: var(--text2); margin-bottom: 6px; font-family: 'IBM Plex Mono', monospace; }
+  .hp-icon { font-size: 20px; margin-bottom: 6px; }
+  .hp-status { font-size: 10px; }
+
+  .patient-table { width: 100%; border-collapse: collapse; }
+  .patient-table th { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.5px; color: var(--text3); text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  .patient-table td { padding: 11px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 12px; color: var(--text2); }
+  .patient-table tr:hover td { background: var(--bg3); }
+  .patient-id { font-family: 'IBM Plex Mono', monospace; color: var(--accent2); }
+  .synth-ready { color: var(--accent); }
+  .synth-pending { color: #ffb400; }
+
+  .gan-viz { position: relative; height: 130px; display: flex; align-items: center; justify-content: center; gap: 20px; margin: 10px 0; }
+  .gan-box {
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+    width: 100px; padding: 14px 10px; text-align: center;
+  }
+  .gan-box.gen { border-color: rgba(0,229,160,0.3); }
+  .gan-box.disc { border-color: rgba(0,200,255,0.3); }
+  .gan-label { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 600; margin-bottom: 6px; }
+  .gan-sub { font-size: 10px; color: var(--text3); }
+  .gan-arrow { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .gan-arrow span { font-size: 10px; color: var(--text3); }
+  .gan-arrow .arr { color: var(--accent); font-size: 18px; }
+  .progress-ring { width: 60px; height: 60px; margin: 0 auto 6px; }
+
+  .btn {
+    background: rgba(0,229,160,0.08); border: 1px solid rgba(0,229,160,0.3); color: var(--accent);
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; padding: 8px 18px;
+    border-radius: 8px; cursor: pointer; transition: all .2s;
+  }
+  .btn:hover { background: rgba(0,229,160,0.15); }
+  .btn.danger { background: rgba(255,107,107,0.08); border-color: rgba(255,107,107,0.3); color: var(--accent3); }
+  .btn.blue { background: rgba(0,200,255,0.08); border-color: rgba(0,200,255,0.3); color: var(--accent2); }
+
+  .upload-zone {
+    border: 1.5px dashed var(--border2); border-radius: 12px;
+    padding: 40px 20px; text-align: center; cursor: pointer; transition: all .2s;
+    background: rgba(0,229,160,0.02);
+  }
+  .upload-zone:hover { background: rgba(0,229,160,0.05); border-color: var(--accent); }
+  .upload-icon { font-size: 32px; margin-bottom: 12px; }
+  .upload-text { color: var(--text2); font-size: 13px; }
+  .upload-text span { color: var(--accent); cursor: pointer; }
+
+  .inline-flex { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  .full-panel { grid-column: 1 / -1; }
+
+  .log-list { font-family: 'IBM Plex Mono', monospace; font-size: 11px; display: flex; flex-direction: column; gap: 6px; max-height: 160px; overflow-y: auto; }
+  .log-item { display: flex; gap: 12px; }
+  .log-time { color: var(--text3); flex-shrink: 0; }
+  .log-msg { color: var(--text2); }
+  .log-msg.ok { color: var(--accent); }
+  .log-msg.warn { color: var(--accent3); }
+  .log-msg.info { color: var(--accent2); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">🔒</div>
+    MedSecure AI
+    <span>/ v2.1.0</span>
+  </div>
+  <div class="nav">
+    <button class="active" onclick="showPage('dashboard', this)">Dashboard</button>
+    <button onclick="showPage('synthetic', this)">Synthetic Data</button>
+    <button onclick="showPage('blockchain', this)">Blockchain</button>
+    <button onclick="showPage('honeypot', this)">Honeypot</button>
+    <button onclick="showPage('patients', this)">Patients</button>
+  </div>
+  <div class="topbar-right">
+    <div class="status-pill"><div class="dot"></div>All Systems Active</div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="sidebar">
+    <div class="sidebar-label">Overview</div>
+    <div class="sidebar-item active" onclick="showPage('dashboard', null, this)">
+      <svg class="sidebar-icon" fill="none" viewBox="0 0 18 18"><rect x="2" y="2" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/><rect x="10" y="2" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/><rect x="2" y="10" width="6" height="6" rx="1.5" fill="currentColor" opacity=".4"/><rect x="10" y="10" width="6" height="6" rx="1.5" fill="currentColor" opacity=".4"/></svg>
+      Dashboard
+    </div>
+    <div class="sidebar-label">Security</div>
+    <div class="sidebar-item" onclick="showPage('blockchain', null, this)">
+      <svg class="sidebar-icon" fill="none" viewBox="0 0 18 18"><path d="M9 2L15 5.5V9C15 12.5 9 16 9 16C9 16 3 12.5 3 9V5.5L9 2Z" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
+      Blockchain Audit
+      <span class="badge">12</span>
+    </div>
+    <div class="sidebar-item" onclick="showPage('honeypot', null, this)">
+      <svg class="sidebar-icon" fill="none" viewBox="0 0 18 18"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="9" r="2" fill="currentColor" opacity=".5"/></svg>
+      Honeypot Monitor
+      <span class="badge" style="background:rgba(255,107,107,.12);color:#ff6b6b">2</span>
+    </div>
+    <div class="sidebar-label">Data</div>
+    <div class="sidebar-item" onclick="showPage('synthetic', null, this)">
+      <svg class="sidebar-icon" fill="none" viewBox="0 0 18 18"><path d="M3 9h12M3 5h12M3 13h12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      GAN Synthesis
+    </div>
+    <div class="sidebar-item" onclick="showPage('patients', null, this)">
+      <svg class="sidebar-icon" fill="none" viewBox="0 0 18 18"><circle cx="9" cy="6" r="3" stroke="currentColor" stroke-width="1.2"/><path d="M3 15c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Patient Records
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD PAGE -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-title">System Overview</div>
+      <div class="page-sub">Real-time health of MedSecure AI — GAN synthesis, blockchain audit & honeypot security.</div>
+
+      <div class="metrics">
+        <div class="metric-card">
+          <div class="metric-label">PATIENTS PROTECTED</div>
+          <div class="metric-val">4,821</div>
+          <div class="metric-change">+128 this week</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">SYNTHETIC RECORDS</div>
+          <div class="metric-val">12,440</div>
+          <div class="metric-change">GAN Accuracy 97.3%</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">BLOCKCHAIN BLOCKS</div>
+          <div class="metric-val">3,902</div>
+          <div class="metric-change">Last block 2m ago</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">HONEYPOT ALERTS</div>
+          <div class="metric-val">2</div>
+          <div class="metric-change warn">Active intrusions</div>
+        </div>
+      </div>
+
+      <div class="panel full-panel" style="margin-bottom:18px">
+        <div class="panel-title">Data Pipeline Flow</div>
+        <div class="flow">
+          <div class="flow-step"><strong>Raw Patient Data</strong>HIPAA Sensitive</div>
+          <div class="arrow">→</div>
+          <div class="flow-step highlight"><strong>GAN Synthesis</strong>Anonymization</div>
+          <div class="arrow">→</div>
+          <div class="flow-step"><strong>Synthetic Data</strong>Research Ready</div>
+          <div class="arrow">→</div>
+          <div class="flow-step"><strong>Blockchain</strong>Audit Log</div>
+          <div class="arrow">→</div>
+          <div class="flow-step"><strong>Honeypot</strong>Trap Layer</div>
+          <div class="arrow">→</div>
+          <div class="flow-step"><strong>Raw Vault</strong>Encrypted</div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="panel">
+          <div class="panel-title">GAN Model Performance <span class="tag tag-green">Live</span></div>
+          <div class="bar-row"><div class="bar-label">Fidelity</div><div class="bar-track"><div class="bar-fill" style="width:97%"></div></div><div class="bar-val">97%</div></div>
+          <div class="bar-row"><div class="bar-label">Diversity</div><div class="bar-track"><div class="bar-fill" style="width:89%"></div></div><div class="bar-val">89%</div></div>
+          <div class="bar-row"><div class="bar-label">Privacy Score</div><div class="bar-track"><div class="bar-fill blue" style="width:99%"></div></div><div class="bar-val">99%</div></div>
+          <div class="bar-row"><div class="bar-label">Re-ID Risk</div><div class="bar-track"><div class="bar-fill red" style="width:4%"></div></div><div class="bar-val">4%</div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Recent Audit Logs <span class="tag tag-blue">Blockchain</span></div>
+          <div class="log-list">
+            <div class="log-item"><span class="log-time">09:41</span><span class="log-msg ok">Block #3902 — Synthesis confirmed</span></div>
+            <div class="log-item"><span class="log-time">09:38</span><span class="log-msg info">Honeypot probe detected — IP 45.77.x.x</span></div>
+            <div class="log-item"><span class="log-time">09:31</span><span class="log-msg ok">Block #3901 — Audit sealed</span></div>
+            <div class="log-item"><span class="log-time">09:22</span><span class="log-msg warn">Unauthorized access attempt — blocked</span></div>
+            <div class="log-item"><span class="log-time">09:15</span><span class="log-msg ok">GAN epoch 500 — accuracy 97.3%</span></div>
+            <div class="log-item"><span class="log-time">09:08</span><span class="log-msg info">12 new records queued for synthesis</span></div>
+            <div class="log-item"><span class="log-time">08:55</span><span class="log-msg ok">Block #3900 — Vault hashed</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SYNTHETIC DATA PAGE -->
+    <div class="page" id="page-synthetic">
+      <div class="page-title">GAN Synthetic Data Engine</div>
+      <div class="page-sub">Upload raw patient data — our GAN transforms it into privacy-safe synthetic records.</div>
+
+      <div class="grid2">
+        <div class="panel">
+          <div class="panel-title">Upload Raw Data</div>
+          <div class="upload-zone" onclick="simulateUpload()">
+            <div class="upload-icon">📂</div>
+            <div class="upload-text">Drop CSV / HL7 / FHIR here<br><span>or click to browse</span></div>
+          </div>
+          <div id="upload-status" style="margin-top:14px; font-size:12px; color:var(--text3); font-family:'IBM Plex Mono',monospace;"></div>
+          <div class="inline-flex">
+            <button class="btn" onclick="runSynthesis()">▶ Run GAN Synthesis</button>
+            <button class="btn blue" onclick="downloadSynth()">↓ Download Synthetic</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">GAN Architecture</div>
+          <div class="gan-viz">
+            <div class="gan-box gen">
+              <div class="gan-label" style="color:var(--accent)">Generator</div>
+              <svg class="progress-ring" viewBox="0 0 60 60">
+                <circle cx="30" cy="30" r="24" stroke="rgba(0,229,160,0.15)" stroke-width="4" fill="none"/>
+                <circle cx="30" cy="30" r="24" stroke="#00e5a0" stroke-width="4" fill="none" stroke-dasharray="150.8" stroke-dashoffset="10" stroke-linecap="round" transform="rotate(-90 30 30)"/>
+                <text x="30" y="34" text-anchor="middle" fill="#00e5a0" font-size="12" font-family="Syne">97%</text>
+              </svg>
+              <div class="gan-sub">Synthetic output</div>
+            </div>
+            <div class="gan-arrow">
+              <span>noise →</span>
+              <div class="arr">⇄</div>
+              <span>← real</span>
+            </div>
+            <div class="gan-box disc">
+              <div class="gan-label" style="color:var(--accent2)">Discriminator</div>
+              <svg class="progress-ring" viewBox="0 0 60 60">
+                <circle cx="30" cy="30" r="24" stroke="rgba(0,200,255,0.15)" stroke-width="4" fill="none"/>
+                <circle cx="30" cy="30" r="24" stroke="#00c8ff" stroke-width="4" fill="none" stroke-dasharray="150.8" stroke-dashoffset="24" stroke-linecap="round" transform="rotate(-90 30 30)"/>
+                <text x="30" y="34" text-anchor="middle" fill="#00c8ff" font-size="12" font-family="Syne">84%</text>
+              </svg>
+              <div class="gan-sub">Real vs fake</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:12px; margin-top:4px;">
+            <div style="flex:1; background:var(--bg3); border-radius:8px; padding:10px; text-align:center;">
+              <div style="font-size:10px;color:var(--text3);margin-bottom:4px; font-family:'IBM Plex Mono',monospace">EPOCHS</div>
+              <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;">500</div>
+            </div>
+            <div style="flex:1; background:var(--bg3); border-radius:8px; padding:10px; text-align:center;">
+              <div style="font-size:10px;color:var(--text3);margin-bottom:4px; font-family:'IBM Plex Mono',monospace">LOSS</div>
+              <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--accent)">0.024</div>
+            </div>
+            <div style="flex:1; background:var(--bg3); border-radius:8px; padding:10px; text-align:center;">
+              <div style="font-size:10px;color:var(--text3);margin-bottom:4px; font-family:'IBM Plex Mono',monospace">RECORDS</div>
+              <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--accent2)">12k</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel full-panel" style="margin-top:18px">
+        <div class="panel-title">Synthesis Progress <span id="synth-pct" class="tag tag-green">Ready</span></div>
+        <div id="synth-bar-wrap" style="background:var(--bg3);border-radius:4px;height:8px;margin:10px 0 14px;">
+          <div id="synth-bar" style="height:100%;width:0%;background:var(--accent);border-radius:4px;transition:width .4s;"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+          <div style="font-size:12px;color:var(--text2);" id="step1">⬜ Load Dataset</div>
+          <div style="font-size:12px;color:var(--text2);" id="step2">⬜ Preprocess</div>
+          <div style="font-size:12px;color:var(--text2);" id="step3">⬜ Train GAN</div>
+          <div style="font-size:12px;color:var(--text2);" id="step4">⬜ Export Synthetic</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCKCHAIN PAGE -->
+    <div class="page" id="page-blockchain">
+      <div class="page-title">Blockchain Audit Trail</div>
+      <div class="page-sub">Immutable tamper-proof ledger of every data access, synthesis, and vault event.</div>
+
+      <div class="metrics" style="grid-template-columns:repeat(3,1fr)">
+        <div class="metric-card"><div class="metric-label">TOTAL BLOCKS</div><div class="metric-val">3,902</div><div class="metric-change">Chain integrity: 100%</div></div>
+        <div class="metric-card"><div class="metric-label">LAST BLOCK HASH</div><div class="metric-val" style="font-size:14px;font-family:'IBM Plex Mono',monospace;color:var(--accent2)">0xf8a2...d91c</div><div class="metric-change">2 minutes ago</div></div>
+        <div class="metric-card"><div class="metric-label">CONSENSUS</div><div class="metric-val">PoA</div><div class="metric-change">3 validators active</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Recent Blocks <span class="tag tag-blue">Live</span></div>
+        <div class="chain-list">
+          <div class="chain-item">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);min-width:52px">#3902</div>
+            <div class="chain-hash">0xf8a2c3e1d44b9f02a831...d91c</div>
+            <div class="chain-meta">Synthesis · PT-4821</div>
+            <div class="chain-status confirmed">Confirmed</div>
+          </div>
+          <div class="chain-item">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);min-width:52px">#3901</div>
+            <div class="chain-hash">0xb31a77f5c022e9d4f018...c423</div>
+            <div class="chain-meta">Vault seal · Batch 88</div>
+            <div class="chain-status confirmed">Confirmed</div>
+          </div>
+          <div class="chain-item">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);min-width:52px">#3900</div>
+            <div class="chain-hash">0x2de4aa81b99c3f7e2155...8f01</div>
+            <div class="chain-meta">Access log · Dr. Meera</div>
+            <div class="chain-status confirmed">Confirmed</div>
+          </div>
+          <div class="chain-item">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);min-width:52px">#3899</div>
+            <div class="chain-hash">0x9fa0d12c7bb4e6509a33...1b77</div>
+            <div class="chain-meta">Honeypot alert · IP flagged</div>
+            <div class="chain-status" style="background:rgba(255,180,0,0.1);color:#ffb400">Sealed</div>
+          </div>
+          <div class="chain-item">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);min-width:52px">#3898</div>
+            <div class="chain-hash">0x3cd9b04e11f2a8706e77...4a2c</div>
+            <div class="chain-meta">Synthesis · PT-4820</div>
+            <div class="chain-status confirmed">Confirmed</div>
+          </div>
+        </div>
+        <div class="inline-flex" style="margin-top:16px">
+          <button class="btn blue">🔍 Verify Block Hash</button>
+          <button class="btn">↓ Export Audit CSV</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HONEYPOT PAGE -->
+    <div class="page" id="page-honeypot">
+      <div class="page-title">Honeypot Security Monitor</div>
+      <div class="page-sub">Decoy patient records act as traps — any access triggers an immediate alert and blockchain log.</div>
+
+      <div class="metrics" style="grid-template-columns:repeat(3,1fr)">
+        <div class="metric-card"><div class="metric-label">ACTIVE TRAPS</div><div class="metric-val">6</div><div class="metric-change">3 types deployed</div></div>
+        <div class="metric-card"><div class="metric-label">TRIGGERED TODAY</div><div class="metric-val" style="color:var(--accent3)">2</div><div class="metric-change warn">Investigation open</div></div>
+        <div class="metric-card"><div class="metric-label">THREAT LEVEL</div><div class="metric-val" style="color:#ffb400">Medium</div><div class="metric-change warn">2 active probes</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Honeypot Traps Status</div>
+        <div class="honeypot-grid">
+          <div class="hp-cell triggered">
+            <div class="hp-icon">🪤</div>
+            <div class="hp-name">DECOY-PT-001</div>
+            <div class="hp-status" style="color:var(--accent3)">TRIGGERED</div>
+          </div>
+          <div class="hp-cell">
+            <div class="hp-icon">🛡️</div>
+            <div class="hp-name">DECOY-PT-002</div>
+            <div class="hp-status" style="color:var(--accent)">SILENT</div>
+          </div>
+          <div class="hp-cell triggered">
+            <div class="hp-icon">🪤</div>
+            <div class="hp-name">DECOY-PT-003</div>
+            <div class="hp-status" style="color:var(--accent3)">TRIGGERED</div>
+          </div>
+          <div class="hp-cell">
+            <div class="hp-icon">🛡️</div>
+            <div class="hp-name">DECOY-FILE-A</div>
+            <div class="hp-status" style="color:var(--accent)">SILENT</div>
+          </div>
+          <div class="hp-cell">
+            <div class="hp-icon">🛡️</div>
+            <div class="hp-name">DECOY-FILE-B</div>
+            <div class="hp-status" style="color:var(--accent)">SILENT</div>
+          </div>
+          <div class="hp-cell">
+            <div class="hp-icon">🛡️</div>
+            <div class="hp-name">DECOY-API-X</div>
+            <div class="hp-status" style="color:var(--accent)">SILENT</div>
+          </div>
+        </div>
+        <div class="inline-flex" style="margin-top:18px">
+          <button class="btn danger">🚨 Investigate Alerts</button>
+          <button class="btn">+ Deploy New Trap</button>
+          <button class="btn blue">📋 Threat Report</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PATIENTS PAGE -->
+    <div class="page" id="page-patients">
+      <div class="page-title">Patient Records</div>
+      <div class="page-sub">Raw data is vault-encrypted. Only synthetic counterparts are available for research access.</div>
+
+      <div class="panel">
+        <div class="panel-title">Records <span class="tag tag-green">4,821 Protected</span></div>
+        <table class="patient-table">
+          <thead>
+            <tr>
+              <th>PATIENT ID</th>
+              <th>AGE RANGE</th>
+              <th>CONDITION</th>
+              <th>RAW DATA</th>
+              <th>SYNTHETIC STATUS</th>
+              <th>BLOCKCHAIN</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="patient-id">PT-4821</td>
+              <td>45–50</td>
+              <td>Hypertension</td>
+              <td><span class="tag tag-red">Vault Locked</span></td>
+              <td class="synth-ready">✓ Ready</td>
+              <td class="patient-id">#3902</td>
+            </tr>
+            <tr>
+              <td class="patient-id">PT-4820</td>
+              <td>30–35</td>
+              <td>Diabetes T2</td>
+              <td><span class="tag tag-red">Vault Locked</span></td>
+              <td class="synth-ready">✓ Ready</td>
+              <td class="patient-id">#3898</td>
+            </tr>
+            <tr>
+              <td class="patient-id">PT-4819</td>
+              <td>60–65</td>
+              <td>Cardiac</td>
+              <td><span class="tag tag-red">Vault Locked</span></td>
+              <td class="synth-pending">⏳ Processing</td>
+              <td class="patient-id">Pending</td>
+            </tr>
+            <tr>
+              <td class="patient-id">PT-4818</td>
+              <td>25–30</td>
+              <td>Asthma</td>
+              <td><span class="tag tag-red">Vault Locked</span></td>
+              <td class="synth-ready">✓ Ready</td>
+              <td class="patient-id">#3891</td>
+            </tr>
+            <tr>
+              <td class="patient-id">PT-4817</td>
+              <td>55–60</td>
+              <td>Renal</td>
+              <td><span class="tag tag-red">Vault Locked</span></td>
+              <td class="synth-ready">✓ Ready</td>
+              <td class="patient-id">#3887</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="inline-flex" style="margin-top:16px">
+          <button class="btn blue">↓ Export Synthetic Dataset</button>
+          <button class="btn">🔍 Request Raw Audit</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const pages = ['dashboard','synthetic','blockchain','honeypot','patients'];
+const sidebarItems = document.querySelectorAll('.sidebar-item');
+const navBtns = document.querySelectorAll('.nav button');
+
+function showPage(name, navBtn, sidebarBtn) {
+  pages.forEach(p => {
+    document.getElementById('page-'+p).classList.remove('active');
+  });
+  document.getElementById('page-'+name).classList.add('active');
+  navBtns.forEach(b => b.classList.remove('active'));
+  sidebarItems.forEach(b => b.classList.remove('active'));
+  if (navBtn) navBtn.classList.add('active');
+  if (sidebarBtn) sidebarBtn.classList.add('active');
+}
+
+function simulateUpload() {
+  const el = document.getElementById('upload-status');
+  el.style.color = 'var(--accent)';
+  el.textContent = '✓ patients_batch_89.csv loaded — 128 records detected';
+}
+
+function runSynthesis() {
+  const bar = document.getElementById('synth-bar');
+  const pct = document.getElementById('synth-pct');
+  const steps = ['step1','step2','step3','step4'];
+  const labels = ['✅ Load Dataset','✅ Preprocess','✅ Train GAN','✅ Export Synthetic'];
+  const widths = [25, 50, 85, 100];
+  steps.forEach(s => { document.getElementById(s).style.color = 'var(--text2)'; });
+  document.getElementById('step1').textContent = '⬜ Load Dataset';
+  document.getElementById('step2').textContent = '⬜ Preprocess';
+  document.getElementById('step3').textContent = '⬜ Train GAN';
+  document.getElementById('step4').textContent = '⬜ Export Synthetic';
+  let i = 0;
+  function next() {
+    if (i >= 4) { pct.textContent = '100% Done'; pct.className = 'tag tag-green'; return; }
+    bar.style.width = widths[i] + '%';
+    document.getElementById(steps[i]).textContent = labels[i];
+    document.getElementById(steps[i]).style.color = 'var(--accent)';
+    pct.textContent = widths[i] + '%';
+    i++;
+    setTimeout(next, 900);
+  }
+  pct.textContent = 'Running...';
+  next();
+}
+
+function downloadSynth() {
+  alert('Synthetic dataset download triggered — blockchain audit logged.');
+}
+</script>
+</body>
+</html>

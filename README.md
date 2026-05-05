@@ -1,97 +1,91 @@
-# 🏥 MedSecure AI
+# 🏥 MedSecure AI : Cybersecurity Command Center
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue)
-![Status](https://img.shields.io/badge/status-Beta-orange)
+![Status](https://img.shields.io/badge/status-Live_Demo-success)
 
-**MedSecure AI** is an advanced machine learning framework designed to enhance the security, privacy, and integrity of medical data. By leveraging state-of-the-art AI, the platform provides automated threat detection, patient data de-identification, and HIPAA-compliant audit logging.
+**MedSecure AI** is a state-of-the-art cybersecurity and privacy preservation framework designed specifically for the healthcare sector. It provides an impenetrable defense system for Electronic Health Records (EHR) by combining generative AI for data anonymization, cryptographic blockchains for audit logging, and active honeypot traps for threat neutralization.
 
-## 🚀 Key Features
+---
 
-*   **Anonymization Engine:** Automatically scrubs Personally Identifiable Information (PII) from medical records using Named Entity Recognition (NER).
-*   **Anomaly Detection:** Identifies unusual access patterns or suspicious modifications to Electronic Health Records (EHR) in real-time.
-*   **Secure Inference:** Supports encrypted data processing to ensure patient privacy during AI diagnostic assistance.
-*   **Compliance Mapping:** Built-in reporting tools to assist with HIPAA and GDPR auditing requirements.
+## 🚀 Core Technologies & Features
+
+### 1. GAN Synthetic Data Engine
+To prevent the exposure of sensitive Protected Health Information (PHI), MedSecure AI uses Generative Adversarial Networks (GANs).
+*   **The Process:** Upload raw patient datasets (CSV/HL7). The AI synthesizes entirely new, mathematically equivalent records.
+*   **The Result:** Researchers and third-party analysts can work with high-fidelity data without ever touching real patient records, ensuring 100% HIPAA compliance.
+
+### 2. Immutable Blockchain Audit Ledger
+Traditional databases can be tampered with. MedSecure AI routes every single interaction through a custom cryptographic blockchain.
+*   **Tamper-Proof:** Every data synthesis, vault access request, and system event is permanently hashed into the ledger.
+*   **Forensics:** In the event of a breach, investigators have a perfect, unalterable timeline of the attack vector.
+
+### 3. Interactive Honeypot Defense System
+Instead of just building a wall, MedSecure AI actively hunts attackers.
+*   **Decoys:** Deploys highly attractive, fake data assets (e.g., `VIP_Patient_Records.decoy`, `DECOY-DB-04`) around the perimeter of the real data vault.
+*   **Instant Lockdown:** If a malicious actor probes a decoy, the system immediately locks down the real data vault, blocks exfiltration, and triggers a visual command center alarm.
+
+### 4. Threat Resolution HUD
+A professional, glassmorphic command center dashboard that allows administrators to actively monitor and resolve threats.
+*   **Active Threat Analysis:** View the attacker's IP, Geo-Location, and SQL Injection vectors in real time.
+*   **Firewall Integration:** A one-click "Ban IP & Seal Perimeter" protocol that neutralizes the threat, logs the action to the blockchain, and restores the system to a secure state.
 
 ---
 
 ## 🛠️ Tech Stack
 
-*   **Language:** Python 3.9+
-*   **AI/ML:** PyTorch / TensorFlow, Hugging Face Transformers
-*   **Security:** Cryptography.io, OpenSSL
-*   **Database:** PostgreSQL (with AES-256 encryption)
-*   **API:** FastAPI / Flask
+*   **Frontend:** HTML5, Vanilla JavaScript, CSS3 (Custom Glassmorphism UI)
+*   **Backend:** Python, Flask API
+*   **Security Ledger:** Custom Python-based Cryptographic Blockchain (`hashlib`, `time`)
+*   **AI Synthesis:** (Simulated/Integrated) Generative Adversarial Networks
 
 ---
 
-## 📦 Installation
+## 📦 Installation & Setup
 
 1.  **Clone the Repository**
     ```bash
-    git clone [https://github.com/yourusername/medsecure-ai.git](https://github.com/yourusername/medsecure-ai.git)
-    cd medsecure-ai
+    git clone https://github.com/yourusername/medsecure-ai.git
+    cd medsecure-ai/backend
     ```
 
-2.  **Set Up Virtual Environment**
+2.  **Install Dependencies**
+    Ensure you have Python installed, then run:
     ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    pip install Flask werkzeug
     ```
 
-3.  **Install Dependencies**
+3.  **Run the Command Center**
     ```bash
-    pip install -r requirements.txt
+    python app.py
     ```
 
-4.  **Environment Variables**
-    Create a `.env` file in the root directory and add your keys:
-    ```env
-    DATABASE_URL=your_secure_db_url
-    SECRET_KEY=your_super_secret_key
-    ENCRYPTION_SALT=your_salt_here
-    ```
+4.  **Access the Dashboard**
+    Open your web browser and navigate to:
+    `http://127.0.0.1:5000`
 
 ---
 
-## 📋 Usage Example
+## 📋 Running the Live Presentation Demo
 
-To run the PII scrubbing module on a sample medical text:
-```python
-from medsecure.core import Anonymizer
+If you are presenting MedSecure AI to judges or stakeholders, follow this exact workflow:
 
-text = "Patient John Doe, born 05/12/1984, visited St. Jude Hospital."
-clean_text = Anonymizer.scrub(text)
+1.  **The Synthesis Demo:** Navigate to the "Synthetic Data" tab. Click **Run GAN Synthesis** to watch the progress bar generate fake data, then click **Download Synthetic** to prove the file generates.
+2.  **The Blockchain Demo:** Navigate to the "Blockchain Audit" tab. Click **Audit Entire Chain** to show the terminal decoding the cryptographic blocks live.
+3.  **The Attack Demo:** Click the green **System Secure** pill in the top right corner. The system will simulate a critical privacy breach, locking down the UI with a full-screen red warning.
+4.  **The Resolution Demo:**
+    *   Click **Override Lockdown**.
+    *   Navigate to the **Honeypot** page (Notice `DECOY-PT-001` is flashing red).
+    *   Click **🚨 Investigate Alerts** to open the Threat Analysis HUD.
+    *   Click **Ban IP & Seal Perimeter**. The system will visually execute the firewall protocol, log the permanent IP ban to the blockchain, and restore the dashboard to a secure green state!
 
-print(clean_text)
-# Output: "Patient [REDACTED], born [REDACTED], visited [REDACTED]."
-## 🤝 Contributing
+---
 
-We welcome contributions to make healthcare safer! 
-1. Fork the Project.
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the Branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request.
+## 🔒 Security Disclaimer
+
+> **Important:** MedSecure AI is a demonstration prototype designed for hackathons and presentations. Do not deploy this in a live clinical environment handling real HIPAA patient data without integrating a production-ready Web3 ledger (e.g., Ethereum/Hyperledger) and passing a rigorous third-party penetration test.
 
 ---
 
 ## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-## 📧 Contact
-
-**Project Link:** [https://github.com/yourusername/medsecure-ai](https://github.com/yourusername/medsecure-ai)  
-**Maintained by:** Your Name / Organization
-
----
-
-What specific part of the AI—like theCreating a solid README is like putting a nice suit on your code—it makes a great first impression. Since **MedSecure AI** sounds like a high-stakes intersection of healthcare and security, you’ll want a balance of technical detail and trust-building information.
-
-Here is a comprehensive, professional README template tailored for your project.
-## 🔒 Security Disclaimer
-
-> **Important:** While MedSecure AI is built with security best practices, it is provided "as-is." Always perform a full third-party security audit before deploying this software in a live clinical environment handling sensitive patient data.
+Distributed under the MIT License.

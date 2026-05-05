@@ -84,5 +84,24 @@ def deploy_honeypot():
     audit_trail.create_block(proof=100, previous_hash=last_block['hash'], meta=f"Honeypot trap deployed: {trap_name}")
     return jsonify({"status": "success"})
 
+@app.route('/api/honeypot/trigger', methods=['POST'])
+def trigger_breach():
+    # Print a massive warning to the backend terminal for the live demo
+    print("\n" + "="*60)
+    print("\033[91m[CRITICAL ALERT] UNAUTHORIZED ACCESS DETECTED\033[0m")
+    print("\033[93mTarget: VIP_Patient_Records.decoy\033[0m")
+    print("\033[93mSource IP: 45.77.19.102 (SQLi Probe)\033[0m")
+    print("\033[91mInitiating System Lockdown & Writing Threat Intel to Blockchain...\033[0m")
+    print("="*60 + "\n")
+    
+    last_block = audit_trail.get_last_block()
+    audit_trail.create_block(
+        proof=999, 
+        previous_hash=last_block['hash'], 
+        meta="THREAT INTEL: VIP_Patient_Records accessed by 45.77.19.102"
+    )
+    
+    return jsonify({"status": "Threat logged to blockchain"})
+
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

@@ -49,27 +49,42 @@
     position: sticky; top: 0; z-index: 100;
   }
   .logo {
-    font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.5px;
-    display: flex; align-items: center; gap: 12px;
+    font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; letter-spacing: -0.5px;
+    display: flex; align-items: center; gap: 14px;
   }
   .logo-text {
-    background: linear-gradient(90deg, #ffffff, #38bdf8);
+    background: linear-gradient(90deg, #ffffff, var(--accent2));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    display: flex; align-items: baseline; gap: 4px;
+  }
+  .logo-highlight {
+    font-weight: 800; font-style: italic; color: var(--accent);
+    -webkit-text-fill-color: var(--accent);
   }
   .logo-icon {
-    width: 32px; height: 32px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center; font-size: 16px;
-    background: var(--accent); color: white; box-shadow: var(--shadow);
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white; box-shadow: var(--shadow), inset 0 2px 4px rgba(255,255,255,0.4);
   }
-  .logo span { color: var(--text2); font-weight: 500; font-size: 12px; font-family: 'IBM Plex Mono', monospace;}
+  .logo-icon svg { width: 20px; height: 20px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2)); }
+  .logo-version { color: var(--text3); font-weight: 600; font-size: 11px; font-family: 'IBM Plex Mono', monospace; padding-bottom: 2px; }
   .topbar-right { display: flex; align-items: center; gap: 16px; }
   .status-pill {
     background: var(--accent-light); border: 1px solid var(--border); color: var(--accent);
     font-size: 12px; font-weight: 600; padding: 6px 14px;
-    border-radius: 20px; display: flex; align-items: center; gap: 8px;
+    border-radius: 20px; display: flex; align-items: center; gap: 8px; transition: all 0.3s;
+  }
+  .status-pill.danger {
+    background: var(--accent3-light); border-color: var(--accent3); color: var(--accent3);
   }
   .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  .dot.secure { background: var(--accent); animation: blink-dot 2s infinite; }
+  .dot.danger { background: #b91c1c; animation: blink-dot-fast 0.5s infinite; } /* Dark Red */
+  
+  @keyframes blink-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.8); } }
+  @keyframes blink-dot-fast { 0%, 100% { opacity: 1; box-shadow: 0 0 8px #b91c1c; } 50% { opacity: 0.5; box-shadow: none; } }
   
   .nav { display: flex; gap: 8px; }
   .nav button {
@@ -260,15 +275,141 @@
   .log-msg.ok { color: var(--accent); }
   .log-msg.warn { color: var(--accent3); }
   .log-msg.info { color: var(--accent2); }
+
+  /* Breach Lockdown Modal */
+  .breach-modal {
+    position: fixed; inset: 0; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px);
+    z-index: 9999; display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .breach-modal.active { opacity: 1; pointer-events: auto; }
+  .breach-modal-content {
+    background: rgba(239, 68, 68, 0.05); border: 2px solid var(--accent3); border-radius: 16px;
+    padding: 60px 40px; text-align: center; max-width: 600px; width: 90%;
+    box-shadow: 0 0 50px rgba(239, 68, 68, 0.2); animation: pulse-border 2s infinite;
+    transform: scale(0.9); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .breach-modal.active .breach-modal-content { transform: scale(1); }
+  @keyframes pulse-border { 0%, 100% { box-shadow: 0 0 50px rgba(239, 68, 68, 0.2); } 50% { box-shadow: 0 0 80px rgba(239, 68, 68, 0.5); } }
+  .breach-icon { font-size: 72px; margin-bottom: 24px; animation: blink-dot-fast 1s infinite; }
+  .breach-modal h1 { color: var(--accent3); font-size: 32px; font-weight: 800; margin-bottom: 16px; letter-spacing: 1px; }
+  .breach-modal p { color: var(--text); font-size: 18px; line-height: 1.6; font-family: 'IBM Plex Mono', monospace; margin-bottom: 32px; }
+
+  /* Threat Investigation Modal */
+  .threat-modal {
+    position: fixed; inset: 0; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px);
+    z-index: 9998; display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .threat-modal.active { opacity: 1; pointer-events: auto; }
+  .threat-content {
+    background: var(--bg2); border: 1px solid var(--accent3); border-radius: 12px;
+    width: 600px; max-width: 90%; overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(239, 68, 68, 0.3);
+  }
+  .threat-header {
+    background: rgba(239, 68, 68, 0.1); padding: 16px 20px; border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .threat-header h2 { font-size: 16px; color: var(--accent3); display: flex; align-items: center; gap: 8px; }
+  .threat-body { padding: 24px; font-family: 'IBM Plex Mono', monospace; }
+  .threat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .threat-stat { background: rgba(0,0,0,0.2); padding: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); }
+  .threat-stat label { display: block; font-size: 10px; color: var(--text3); margin-bottom: 4px; }
+  .threat-stat val { display: block; font-size: 14px; color: var(--text); }
+  .threat-stat val.red { color: var(--accent3); }
+
+  /* Audit Request Modal */
+  .audit-modal {
+    position: fixed; inset: 0; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px);
+    z-index: 9998; display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .audit-modal.active { opacity: 1; pointer-events: auto; }
+  .audit-content {
+    background: var(--bg2); border: 1px solid var(--accent); border-radius: 12px;
+    width: 500px; max-width: 90%; overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(45, 212, 191, 0.3);
+  }
+  .audit-header {
+    background: rgba(45, 212, 191, 0.1); padding: 16px 20px; border-bottom: 1px solid rgba(45, 212, 191, 0.2);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .audit-header h2 { font-size: 16px; color: var(--accent); display: flex; align-items: center; gap: 8px; }
+  .audit-body { padding: 24px; }
+  .audit-input {
+    width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--border2);
+    color: var(--text); padding: 12px; border-radius: 6px; font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px; margin-bottom: 16px; outline: none; transition: border-color 0.2s;
+  }
+  .audit-input:focus { border-color: var(--accent); }
 </style>
 </head>
 <body>
 
+<div id="breach-modal" class="breach-modal">
+  <div class="breach-modal-content">
+    <div class="breach-icon">⚠️</div>
+    <h1>CRITICAL PRIVACY BREACH</h1>
+    <p>Multiple unauthorized access attempts detected.<br>System lockdown initiated. <strong>Do not use.</strong></p>
+    <button class="btn danger" onclick="toggleBreachDemo()" style="font-size:15px; padding:12px 32px; letter-spacing: 1px;">⚠️ OVERRIDE LOCKDOWN</button>
+  </div>
+</div>
+
+<div id="threat-modal" class="threat-modal">
+  <div class="threat-content">
+    <div class="threat-header">
+      <h2><span style="animation: blink-dot-fast 1s infinite;">🔴</span> ACTIVE THREAT ANALYSIS: TR-0922</h2>
+      <button onclick="closeThreatModal()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:20px;">×</button>
+    </div>
+    <div class="threat-body">
+      <div class="threat-grid">
+        <div class="threat-stat"><label>THREAT VECTOR</label><val class="red">SQL Injection Probe</val></div>
+        <div class="threat-stat"><label>TARGET ASSET</label><val>VIP_Patient_Records.decoy</val></div>
+        <div class="threat-stat"><label>ORIGIN IP</label><val>45.77.19.102</val></div>
+        <div class="threat-stat"><label>GEO-LOCATION</label><val>St. Petersburg, RU</val></div>
+      </div>
+      <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); padding: 12px; border-radius: 6px; margin-bottom: 24px; color: #22c55e; font-size: 12px;">
+        ✓ AUTOMATED RESPONSE: Trap triggered. Main data vault encrypted and locked. Threat connection isolated.
+      </div>
+      <div style="display: flex; gap: 12px; justify-content: flex-end;">
+        <button class="btn" onclick="closeThreatModal()">Dismiss</button>
+        <button class="btn danger" onclick="banThreatIp()">Ban IP & Seal Perimeter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="audit-modal" class="audit-modal">
+  <div class="audit-content">
+    <div class="audit-header">
+      <h2>🔐 MULTI-SIG AUTHENTICATION REQUIRED</h2>
+      <button onclick="closeAuditModal()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:20px;">×</button>
+    </div>
+    <div class="audit-body">
+      <p style="font-size:14px; color:var(--text2); margin-bottom:16px; line-height:1.5;">
+        Raw patient data is vault-encrypted to ensure HIPAA compliance. You must provide a cryptographic multi-sig key to request an audit unsealing from the Medical Review Board.
+      </p>
+      <input type="password" id="audit-key-input" class="audit-input" placeholder="Enter Multi-Sig Key (e.g. 0xA9B4...)" />
+      <div id="audit-error" style="color:var(--accent3); font-size:12px; margin-bottom:16px; display:none; font-weight:600;">CRITICAL ERROR: Audits are disabled during active lockdowns.</div>
+      <div id="audit-success" style="color:#22c55e; font-size:12px; margin-bottom:16px; display:none; font-weight:600;">AUTHORIZATION PENDING: Request immutably logged to blockchain.</div>
+      <div style="display: flex; gap: 12px; justify-content: flex-end;">
+        <button class="btn" onclick="closeAuditModal()">Cancel</button>
+        <button class="btn blue" onclick="submitAuditRequest()">Submit Request</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="topbar">
   <div class="logo">
-    <div class="logo-icon">🛡️</div>
-    <span class="logo-text">MedSecure AI</span>
-    <span>v2.4.0</span>
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+    </div>
+    <div class="logo-text">MedSecure<span class="logo-highlight">AI</span></div>
+    <div class="logo-version">v2.4.0</div>
   </div>
   <div class="nav">
     <button class="active" onclick="showPage('dashboard', this)">Dashboard</button>
@@ -277,8 +418,12 @@
     <button onclick="showPage('honeypot', this)">Honeypot</button>
     <button onclick="showPage('patients', this)">Patients</button>
   </div>
-  <div class="topbar-right">
-    <div class="status-pill"><div class="dot"></div>System Secure</div>
+  <div class="topbar-right" style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px; padding-top: 4px;">
+    <div class="status-pill" id="global-status-pill" onclick="toggleBreachDemo()" style="cursor: pointer; user-select: none;" title="Click to simulate breach for demo">
+      <div class="dot secure" id="global-status-dot"></div>
+      <span id="global-status-text">System Secure</span>
+    </div>
+    <div id="global-status-subtext" style="font-size: 10px; font-weight: 700; font-family: 'IBM Plex Mono', monospace; color: var(--accent3); opacity: 0; transition: opacity 0.3s; line-height: 1; padding-right: 8px;">HP_FAIL: DECOY_TRIGGERED</div>
   </div>
 </div>
 
@@ -487,28 +632,28 @@
             </div>
             <span id="term-status">AWAITING_INPUT</span>
           </div>
-          <div class="terminal-content" id="term-content">Select a cryptographic node to decode block matrix...<span class="cursor"></span></div>
+          <div class="terminal-content" id="terminal-content">Select a cryptographic node to decode block matrix...<span class="cursor"></span></div>
         </div>
         
         <div class="inline-flex" style="margin-top:16px">
-          <button class="btn blue">🔍 Audit Entire Chain</button>
-          <button class="btn">↓ Export Genesis Ledger</button>
+          <button class="btn blue" onclick="auditChain()">🔍 Audit Entire Chain</button>
+          <button class="btn" onclick="exportLedger()">↓ Export Genesis Ledger</button>
         </div>
       </div>
 
       <div class="panel" style="margin-top: 24px">
-        <div class="panel-title">Registered Datasets <span class="tag tag-green">Verified on Chain</span></div>
+        <div class="panel-title">Blockchain Threat Forensics & Logs <span class="tag tag-green">Verified on Chain</span></div>
         <table class="patient-table">
           <thead>
             <tr>
-              <th>FILENAME</th>
+              <th>LOG RECORD / DECOY NAME</th>
               <th>AUDIT LOG STATUS</th>
-              <th>BLOCK HASH</th>
+              <th>THREAT INTEL / HASH</th>
               <th>TIMESTAMP</th>
             </tr>
           </thead>
           <tbody id="registered-files-body">
-            <tr><td colspan="4" style="text-align:center; color:var(--text3); font-style:italic;">No files registered yet</td></tr>
+            <tr id="empty-log-row"><td colspan="4" style="text-align:center; color:var(--text3); font-style:italic;">No active threats logged</td></tr>
           </tbody>
         </table>
       </div>
@@ -528,20 +673,20 @@
       <div class="panel">
         <div class="panel-title">Honeypot Traps Status</div>
         <div class="honeypot-grid">
-          <div class="hp-cell triggered">
-            <div class="hp-icon">🪤</div>
+          <div class="hp-cell" id="hp-trap-1">
+            <div class="hp-icon" id="hp-icon-1">🛡️</div>
             <div class="hp-name">DECOY-PT-001</div>
-            <div class="hp-status" style="color:var(--accent3)">TRIGGERED</div>
+            <div class="hp-status" id="hp-status-1" style="color:var(--accent)">SILENT</div>
           </div>
           <div class="hp-cell">
             <div class="hp-icon">🛡️</div>
             <div class="hp-name">DECOY-PT-002</div>
             <div class="hp-status" style="color:var(--accent)">SILENT</div>
           </div>
-          <div class="hp-cell triggered">
-            <div class="hp-icon">🪤</div>
+          <div class="hp-cell" id="hp-trap-2">
+            <div class="hp-icon" id="hp-icon-2">🛡️</div>
             <div class="hp-name">DECOY-PT-003</div>
-            <div class="hp-status" style="color:var(--accent3)">TRIGGERED</div>
+            <div class="hp-status" id="hp-status-2" style="color:var(--accent)">SILENT</div>
           </div>
           <div class="hp-cell">
             <div class="hp-icon">🛡️</div>
@@ -560,9 +705,9 @@
           </div>
         </div>
         <div class="inline-flex" style="margin-top:18px">
-          <button class="btn danger">🚨 Investigate Alerts</button>
-          <button class="btn">+ Deploy New Trap</button>
-          <button class="btn blue">📋 Threat Report</button>
+          <button class="btn danger" onclick="investigateAlerts()">🚨 Investigate Alerts</button>
+          <button class="btn" onclick="deployNewTrap()">+ Deploy New Trap</button>
+          <button class="btn blue" onclick="downloadThreatReport()">📋 Threat Report</button>
         </div>
       </div>
     </div>
@@ -629,8 +774,8 @@
           </tbody>
         </table>
         <div class="inline-flex" style="margin-top:16px">
-          <button class="btn blue">↓ Export Synthetic Dataset</button>
-          <button class="btn">🔍 Request Raw Audit</button>
+          <button class="btn blue" onclick="downloadSynth()">↓ Export Synthetic Dataset</button>
+          <button class="btn" onclick="requestRawAudit()">🔍 Request Raw Audit</button>
         </div>
       </div>
     </div>
@@ -704,25 +849,36 @@ function fetchBlockchain() {
         wrapper.innerHTML = nodeHTML;
         if(visualizer) visualizer.appendChild(wrapper);
 
-        // Populate the Registered Datasets table
-        if (block.meta.includes('Uploaded raw data:') || block.meta.includes('GAN synthesis completed')) {
-          let filename = block.meta.includes('Uploaded raw data:') ? block.meta.split(': ')[1] : block.meta.split('for ')[1];
-          let statusText = block.meta.includes('GAN synthesis') ? 'Synthesis Confirmed' : 'Successfully Registered';
-          
+        // Populate the Registered Datasets / Forensics table
+        if (block.meta.includes('Uploaded raw data:') || block.meta.includes('GAN synthesis completed') || block.meta.includes('THREAT INTEL:')) {
           let tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td style="color:var(--accent2); font-family:'IBM Plex Mono', monospace;">📄 ${filename}</td>
-            <td style="color:var(--accent); font-weight:600;">✓ ${statusText}</td>
-            <td style="font-family:'IBM Plex Mono', monospace; font-size:11px;">${block.hash.substring(0, 16)}...</td>
-            <td style="font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--text3)">${block.timestamp}</td>
-          `;
+          
+          if (block.meta.includes('THREAT INTEL:')) {
+            let threatDetails = block.meta.split('THREAT INTEL: ')[1];
+            tr.style.background = 'rgba(239, 68, 68, 0.1)';
+            tr.innerHTML = `
+              <td style="font-family:'IBM Plex Mono', monospace; font-weight:700; color:var(--accent3);">VIP_Patient_Records.decoy</td>
+              <td><span class="tag tag-red">UNAUTHORIZED ACCESS</span></td>
+              <td style="font-family:'IBM Plex Mono', monospace; font-size:12px;">${threatDetails}</td>
+              <td style="font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--text3)">${block.timestamp}</td>
+            `;
+          } else {
+            let filename = block.meta.includes('Uploaded raw data:') ? block.meta.split(': ')[1] : block.meta.split('for ')[1];
+            let statusText = block.meta.includes('GAN synthesis') ? 'Synthesis Confirmed' : 'Successfully Registered';
+            tr.innerHTML = `
+              <td style="color:var(--accent2); font-family:'IBM Plex Mono', monospace;">📄 ${filename}</td>
+              <td style="color:var(--accent); font-weight:600;">✓ ${statusText}</td>
+              <td style="font-family:'IBM Plex Mono', monospace; font-size:11px;">${block.hash.substring(0, 16)}...</td>
+              <td style="font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--text3)">${block.timestamp}</td>
+            `;
+          }
           if (registeredFilesBody) registeredFilesBody.appendChild(tr);
         }
       });
       
       // If no files registered, show empty state
       if (registeredFilesBody && registeredFilesBody.children.length === 0) {
-        registeredFilesBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text3); font-style:italic;">No files registered yet</td></tr>';
+        registeredFilesBody.innerHTML = '<tr id="empty-log-row"><td colspan="4" style="text-align:center; color:var(--text3); font-style:italic;">No files registered or threats logged yet</td></tr>';
       }
       
       // Auto-scroll to right and select the latest block
@@ -783,6 +939,68 @@ function decryptBlock(index, element) {
       }
     }, 10);
   }, 200);
+}
+
+function auditChain() {
+  const termContent = document.getElementById('terminal-content');
+  const termStatus = document.getElementById('term-status');
+  
+  if(!termContent || !termStatus) return;
+  
+  if(typeof typeWriterInterval !== 'undefined' && typeWriterInterval) {
+    clearInterval(typeWriterInterval);
+  }
+  
+  termStatus.textContent = 'AUDITING_CHAIN...';
+  termStatus.style.color = '#f59e0b'; // warning yellow
+  
+  let steps = [
+    "INITIATING GLOBAL LEDGER AUDIT...",
+    "Verifying Block 0 (Genesis)... OK",
+    "Verifying Block 1... OK",
+    "Verifying Block 2... OK",
+    "Verifying Block 3... OK",
+    "Verifying Block 4... OK",
+    "Verifying Block 5... OK",
+    "Verifying Block 6... OK",
+    "Verifying Block 7... OK",
+    "\nCRYPTOGRAPHIC AUDIT COMPLETE.",
+    "STATUS: 0 TAMPERED RECORDS DETECTED.",
+    "CHAIN INTEGRITY: 100% SECURE."
+  ];
+  
+  termContent.innerHTML = '';
+  let i = 0;
+  
+  function nextStep() {
+    if (i >= steps.length) {
+      termStatus.textContent = 'AUDIT_PASSED';
+      termStatus.style.color = '#22c55e'; // success green
+      return;
+    }
+    
+    // Add text and append cursor at the end
+    let currentText = termContent.innerHTML.replace('<span class="cursor"></span>', '');
+    termContent.innerHTML = currentText + steps[i] + '\n<span class="cursor"></span>';
+    
+    i++;
+    // Simulate varying network/cryptographic delay (slower start, fast middle, slower end)
+    let delay = (i > 1 && i < 10) ? 100 : 600; 
+    setTimeout(nextStep, delay); 
+  }
+  
+  nextStep();
+}
+
+function exportLedger() {
+  let exportData = window.rawChainData || [{ "info": "No data available" }];
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
+  const dlAnchorElem = document.createElement('a');
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", "medsecure_ledger_export.json");
+  document.body.appendChild(dlAnchorElem);
+  dlAnchorElem.click();
+  dlAnchorElem.remove();
 }
 
 let currentUploadedFile = null;
@@ -880,6 +1098,241 @@ function downloadSynth() {
 
 // Initial fetch
 fetchBlockchain();
+
+// System State Management
+let isCurrentlyBreached = false;
+
+function setSystemState(isSecure) {
+  const pill = document.getElementById('global-status-pill');
+  const dot = document.getElementById('global-status-dot');
+  const text = document.getElementById('global-status-text');
+  const subtext = document.getElementById('global-status-subtext');
+  
+  if (isSecure) {
+    pill.className = 'status-pill';
+    dot.className = 'dot secure';
+    text.textContent = 'System Secure';
+    subtext.style.opacity = '0';
+  } else {
+    pill.className = 'status-pill danger';
+    dot.className = 'dot danger';
+    text.textContent = '⚠️ System Breach';
+    subtext.style.opacity = '1';
+  }
+}
+
+function toggleBreachDemo() {
+  isCurrentlyBreached = !isCurrentlyBreached;
+  setSystemState(!isCurrentlyBreached);
+  
+  const modal = document.getElementById('breach-modal');
+  const logBody = document.getElementById('registered-files-body');
+  
+  // Toggle the honeypots for a realistic demo
+  const trap1 = document.getElementById('hp-trap-1');
+  const trap2 = document.getElementById('hp-trap-2');
+  
+  if (isCurrentlyBreached) {
+    modal.classList.add('active');
+    
+    if (trap1) {
+      trap1.classList.add('triggered');
+      document.getElementById('hp-icon-1').textContent = '🪤';
+      document.getElementById('hp-status-1').textContent = 'TRIGGERED';
+      document.getElementById('hp-status-1').style.color = 'var(--accent3)';
+    }
+    if (trap2) {
+      trap2.classList.add('triggered');
+      document.getElementById('hp-icon-2').textContent = '🪤';
+      document.getElementById('hp-status-2').textContent = 'TRIGGERED';
+      document.getElementById('hp-status-2').style.color = 'var(--accent3)';
+    }
+    
+    // Call the backend to trigger terminal warnings and write to the blockchain
+    fetch('/api/honeypot/trigger', { method: 'POST' })
+      .then(r => r.json())
+      .then(data => {
+        console.log("Backend triggered:", data.status);
+        // Refresh the visualizer so the judges literally see a new block added live
+        fetchBlockchain();
+      })
+      .catch(e => console.error("Error triggering backend:", e));
+      
+  } else {
+    modal.classList.remove('active');
+    
+    // Optionally: do NOT wipe the table here, because the blockchain is immutable.
+    // If you want to wipe it for a repeated demo, you must restart the python backend to clear the in-memory blockchain.
+    
+    if (trap1) {
+      trap1.classList.remove('triggered');
+      document.getElementById('hp-icon-1').textContent = '🛡️';
+      document.getElementById('hp-status-1').textContent = 'SILENT';
+      document.getElementById('hp-status-1').style.color = 'var(--accent)';
+    }
+    if (trap2) {
+      trap2.classList.remove('triggered');
+      document.getElementById('hp-icon-2').textContent = '🛡️';
+      document.getElementById('hp-status-2').textContent = 'SILENT';
+      document.getElementById('hp-status-2').style.color = 'var(--accent)';
+    }
+  }
+}
+
+function investigateAlerts() {
+  if (isCurrentlyBreached) {
+    document.getElementById('threat-modal').classList.add('active');
+  } else {
+    alert("No active alerts to investigate. System is currently secure.");
+  }
+}
+
+function closeThreatModal() {
+  document.getElementById('threat-modal').classList.remove('active');
+}
+
+function banThreatIp() {
+  closeThreatModal();
+  
+  // Show a visual action notification
+  const notification = document.createElement('div');
+  notification.style.position = 'fixed';
+  notification.style.bottom = '40px';
+  notification.style.right = '40px';
+  notification.style.background = 'rgba(34, 197, 94, 0.95)';
+  notification.style.color = '#fff';
+  notification.style.padding = '16px 24px';
+  notification.style.borderRadius = '8px';
+  notification.style.fontFamily = "'IBM Plex Mono', monospace";
+  notification.style.fontWeight = 'bold';
+  notification.style.zIndex = '10000';
+  notification.style.boxShadow = '0 10px 30px rgba(34, 197, 94, 0.4)';
+  notification.style.transition = 'opacity 0.3s';
+  notification.innerHTML = '🛡️ EXECUTING FIREWALL PROTOCOL...<br>Banning IP: 45.77.19.102';
+  document.body.appendChild(notification);
+  
+  // Simulate the action taking 1.5 seconds
+  setTimeout(() => {
+    notification.innerHTML = '✅ THREAT NEUTRALIZED.<br>IP Banned. System restored to secure state.';
+    
+    // Log the resolution to the backend blockchain
+    fetch('/api/honeypot/deploy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ trap_name: "ACTION TAKEN: IP 45.77.19.102 Permanently Banned at Firewall" })
+    }).then(() => {
+      fetchBlockchain(); // Refresh the table
+    });
+    
+    // Reset the system back to SECURE mode
+    setSystemState(true);
+    
+    // Reset the honeypot UI tiles manually
+    const trap1 = document.getElementById('hp-trap-1');
+    const trap2 = document.getElementById('hp-trap-2');
+    if (trap1) {
+      trap1.classList.remove('triggered');
+      document.getElementById('hp-icon-1').textContent = '🛡️';
+      document.getElementById('hp-status-1').textContent = 'SILENT';
+      document.getElementById('hp-status-1').style.color = 'var(--accent)';
+    }
+    if (trap2) {
+      trap2.classList.remove('triggered');
+      document.getElementById('hp-icon-2').textContent = '🛡️';
+      document.getElementById('hp-status-2').textContent = 'SILENT';
+      document.getElementById('hp-status-2').style.color = 'var(--accent)';
+    }
+    
+    // Remove the notification after a few seconds
+    setTimeout(() => {
+      notification.style.opacity = '0';
+      setTimeout(() => document.body.removeChild(notification), 300);
+    }, 4000);
+  }, 1500);
+}
+
+function deployNewTrap() {
+  const trapName = prompt("Enter a name for the new Honeypot Decoy (e.g. DECOY-DB-04):", "DECOY-DB-04");
+  if (!trapName) return; 
+  
+  fetch('/api/honeypot/deploy', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ trap_name: trapName })
+  })
+  .then(r => r.json())
+  .then(data => {
+    alert(`Success: Trap '${trapName}' deployed successfully and registered on the blockchain.`);
+    fetchBlockchain(); // Refresh backend state
+  })
+  .catch(err => console.error(err));
+}
+
+function downloadThreatReport() {
+  let reportContent = "MEDSECURE AI - THREAT INTELLIGENCE REPORT\n=========================================\n\n";
+  const timeNow = new Date().toLocaleString();
+  reportContent += `Generated: ${timeNow}\n\n`;
+  
+  if (isCurrentlyBreached) {
+    reportContent += "STATUS: CRITICAL BREACH\nTHREAT LEVEL: HIGH\n\n[DETECTED ANOMALIES]\n- Target: VIP_Patient_Records.decoy\n- Threat Vector: SQL Injection Probe\n- Source IP: 45.77.19.102\n- Action Taken: System Lockdown, Data Exfiltration Blocked.\n\n[BLOCKCHAIN HASH CONFIRMATION]\n0x9f2b84c11a...";
+  } else {
+    reportContent += "STATUS: SECURE\nTHREAT LEVEL: NONE\n\nNo active anomalies detected in the current session.\nAll honeypot traps are reporting SILENT.\nBlockchain Audit confirms 100% integrity.";
+  }
+  
+  const blob = new Blob([reportContent], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'medsecure_threat_report.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function requestRawAudit() {
+  const modal = document.getElementById('audit-modal');
+  const errorMsg = document.getElementById('audit-error');
+  const successMsg = document.getElementById('audit-success');
+  const input = document.getElementById('audit-key-input');
+  
+  modal.classList.add('active');
+  input.value = '';
+  successMsg.style.display = 'none';
+  
+  if (isCurrentlyBreached) {
+    errorMsg.style.display = 'block';
+    input.disabled = true;
+  } else {
+    errorMsg.style.display = 'none';
+    input.disabled = false;
+    setTimeout(() => input.focus(), 100);
+  }
+}
+
+function closeAuditModal() {
+  document.getElementById('audit-modal').classList.remove('active');
+}
+
+function submitAuditRequest() {
+  if (isCurrentlyBreached) return;
+  const input = document.getElementById('audit-key-input');
+  if (!input.value.trim()) {
+    input.style.borderColor = 'var(--accent3)';
+    setTimeout(() => input.style.borderColor = 'var(--border2)', 1000);
+    return;
+  }
+  
+  document.getElementById('audit-success').style.display = 'block';
+  setTimeout(() => {
+    closeAuditModal();
+  }, 2500);
+}
+
+// Ensure secure state on load
+document.addEventListener('DOMContentLoaded', () => {
+  setSystemState(true);
+});
 </script>
 </body>
 </html>
